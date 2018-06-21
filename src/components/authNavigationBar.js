@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 class AuthNavigationBar extends Component {
 
@@ -17,9 +19,9 @@ class AuthNavigationBar extends Component {
                   <ul className="nav navbar-nav ml-auto" style={{fontSize: '18px'}}>
                       <li className="nav-item"><a href="/businesses" style={{color: '#fff'}} className="nav-link">Businesses</a></li>
                       <li className="nav-item"><a href="/contact" style={{color: '#fff'}} className="nav-link">Contact</a></li>
-                      <li className="nav-item"><a href="/index" style={{color: '#fff'}} className="nav-link">Logout</a></li>
+                      <li className="nav-item"><a href="/" style={{color: '#fff'}} className="nav-link">Logout</a></li>
                       <li className="nav-item dropdown"><a href="#" style={{color: '#fff'}} className="nav-link dropdown-toggle" data-toggle="dropdown">
-                        <img src="Logos/profilepc.png" className="rounded-circle" alt="Profile" width={30} height={30} /> </a>
+                        <img src="#" className="rounded-circle" alt="Profile" width={30} height={30} /> </a>
                         <div className="dropdown-menu">
                             <a className="dropdownItem" href="#" style={{fontWeight: 'bold', color: '#007bff', textAlign: 'center'}}>Hi Sonia RM</a><hr />
                             <a className="dropdownItem" href="/userdashboard">My Businesses</a>
