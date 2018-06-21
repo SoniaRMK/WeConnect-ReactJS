@@ -64,7 +64,7 @@ class User extends Component {
           <h3 style={{color:'#505050'}}>
             <br/>
               WeConnect provides a platform that brings businesses and individuals together.<br/><br/>
-              This platform creates awareness for businesses and   gives the users the ability to write reviews about the 
+              This platform creates awareness for businesses and gives the user the ability to write reviews about the 
               businesses they have interacted with. 
             <br/><br/>
           </h3>

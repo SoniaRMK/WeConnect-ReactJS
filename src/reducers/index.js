@@ -1,10 +1,15 @@
 import { combineReducers} from 'redux';
 import userReducer from './userReducer';
-// import businessReducer from './businessReducer';
+import registerBusinessReducer from './registerBusinessReducer';
+import getAllBusinessesReducer from './getAllBusinessesReducer';
+import getAOneBusinessReducer from './getAOneBusinessReducer';
+
 
 const mainReducer = combineReducers({
     user: userReducer,
-    // business: businessReducer
+    registerBusiness: registerBusinessReducer,
+    getBusinesses: getAllBusinessesReducer,
+    getBusiness: getAOneBusinessReducer
 });
 
 export default mainReducer;
