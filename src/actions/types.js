@@ -1,3 +1,5 @@
 export const SIGN_USER = 'SIGN_USER';
 export const LOGIN_USER = 'LOGIN_USER';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const REGISTER_BUSINESS = 'REGISTER_BUSINESS';
+export const GET_ALL_BUSINESSES = 'GET_ALL_BUSINESSES';

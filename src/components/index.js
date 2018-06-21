@@ -7,6 +7,7 @@ import FooterBar from './footerBar';
 import BusinessOne from './businessOne';
 import BusinessesList from './businessesList';
 import Contact from './contact';
+import BusinessRegister from './businessRegister';
 
 class Index extends Component {
   
@@ -18,12 +19,13 @@ class Index extends Component {
           <Route exact strict path={"/"} component={User}/>
           <Route exact strict path={"/businesses/:bizid"} component={BusinessOne}/>
           <Route exact strict path={"/businesses"} component={BusinessesList}/>
+          <Route exact strict path={"/register-business"} component={BusinessRegister}/>
           <Route exact strict path={"/contact"} component={Contact}/>
         </div>
       </Router>
     )
     return (
-      <div className="App" style={{background:'aliceblue'}}>
+      <div className="App" style={{ background:'aliceblue' }}>
         <Routes/>
         <FooterBar/>
       </div>

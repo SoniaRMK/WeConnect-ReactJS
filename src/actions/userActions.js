@@ -9,7 +9,7 @@ export const signUp=(signUPData)=>dispatch => {
             body:signUPData, 
             headers:{
                 'Content-Type':'application/json'}};
-       fetch(`https://weconnect-flask-api.herokuapp.com/api/v2/auth/register`,options)
+       fetch(`http://127.0.0.1:5000/api/v2/auth/register`,options)
        .then (response => response.json())
        .then (data=> dispatch(
         {
@@ -30,7 +30,7 @@ export const logIn=(loginData)=>dispatch => {
             body:loginData, 
             headers:{
                 'Content-Type':'application/json'}};
-       fetch(`https://weconnect-flask-api.herokuapp.com/api/v2/auth/login`,options)
+       fetch(`http://127.0.0.1:5000/api/v2/auth/login`,options)
        .then (response => response.json())
        .then (data=> dispatch(
         {
