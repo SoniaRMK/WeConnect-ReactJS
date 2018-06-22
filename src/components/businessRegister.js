@@ -99,7 +99,7 @@ BusinessRegister.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  registerBizMessage: state.registerBizMessage.registerBusinessMessage
+  registerBizMessage: state.registerBusiness.registerBusinessMessage
 });
 
 export default withRouter(connect(mapStateToProps, {registerBusiness})(BusinessRegister));

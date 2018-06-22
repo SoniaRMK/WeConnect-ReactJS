@@ -8,6 +8,7 @@ import BusinessOne from './businessOne';
 import BusinessesList from './businessesList';
 import Contact from './contact';
 import BusinessRegister from './businessRegister';
+import ResetPassword from './resetPassword';
 
 class Index extends Component {
   
@@ -20,6 +21,7 @@ class Index extends Component {
           <Route exact strict path={"/businesses/:bizid"} component={BusinessOne}/>
           <Route exact strict path={"/businesses"} component={BusinessesList}/>
           <Route exact strict path={"/register-business"} component={BusinessRegister}/>
+          <Route exact strict path={"/reset-password"} component={ResetPassword}/>
           <Route exact strict path={"/contact"} component={Contact}/>
         </div>
       </Router>
