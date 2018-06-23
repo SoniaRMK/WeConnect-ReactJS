@@ -11,11 +11,17 @@ import AuthNavigationBar from './authNavigationBar';
 
 class BusinessesList extends Component {
 
-  // componentDidMount(){
-  //   this.props.dispatch(getBusinesses());
-  // }
+  componentWillMount=()=>{
+    this.props.getBusinesses();
+  }
 
   render() {
+
+    const businesses=Object.values({...this.props.getBusinessesMessage});
+    if (businesses){
+      Array.prototype.reverse.call(businesses)
+    }
+
     return (
       <div className="businessesList">
         <AuthNavigationBar/>
@@ -75,6 +81,28 @@ class BusinessesList extends Component {
                   </div>
                 </div>
               </div>
+              <div>
+              <br/><br/>
+                <table className="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th>Business Name</th>
+                      <th>Category</th>
+                      <th>Location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {businesses.map((business, index) =>
+                    <tr key={business[index].id}>
+                    <td><a href="/businesses/:bizid"> {business[index].BusinessName}</a></td>
+                    <td> {business[index].Category}</td>
+                    <td> {business[index].Location}</td>
+                    {console.log(business)}
+                    </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
         </div>
       </div>
@@ -82,9 +110,15 @@ class BusinessesList extends Component {
   }
 }
 
-// BusinessesList.propTypes = {
-//   userSignMessage: PropTypes.object.isRequired,
-//   userLoginMessage: PropTypes.object.isRequired
-// }
+BusinessesList.propTypes = {
+  getBusinessesMessage: PropTypes.object.isRequired,
+  businesses: PropTypes.object
+}
 
-export default BusinessesList;
+const mapStateToProps = state =>({
+  getBusinessesMessage:state.getBusinesses.getBusinessesMessage,
+  getBusinesses:PropTypes.func.isRequired,
+  businesses:state.getBusinesses.getBusinessesMessage
+});
+
+export default withRouter(connect(mapStateToProps,{getBusinesses})(BusinessesList));

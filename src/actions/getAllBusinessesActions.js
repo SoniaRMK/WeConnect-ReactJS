@@ -1,13 +1,10 @@
 import { GET_ALL_BUSINESSES} from './types';
 
-export const getBusinesses=(getBusinessesData)=>dispatch => {
+export const getBusinesses=()=>dispatch => {
     console.log('Getting all Businesses...');
-    console.log('Bearer ' + sessionStorage.getItem('access_token'));
-    if (getBusinessesData){
 
         const options = {
             method:'GET',
-            body:getBusinessesData, 
             headers:{
                 'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
                 'Content-Type':'application/json'}};
@@ -21,5 +18,4 @@ export const getBusinesses=(getBusinessesData)=>dispatch => {
     
     ))
     
-    }
 }

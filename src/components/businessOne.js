@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getBusiness } from '../actions/getOneBusinessActions';
 import AuthNavigationBar from './authNavigationBar';
 
 class BusinessOne extends Component {
+
+  componentWillMount=()=>{
+    this.props.getBusiness();
+  }
+
+  // const business = this.props.getBusinessMessage;
+  //   if (business){
+  //     Array.prototype.reverse.call(business)
+  //   }
 
   render() {
     return (
       <div className="App">
         <AuthNavigationBar/>
          <div className="container">
-          <br /><br /><h1>BusinessName</h1><hr /><br />
-          {/* <img src="Logos/logo.gif" className="img-thumbnail" alt="logo" width={304} height={236} style={{border: '7px solid #007bff'}} /><hr /> <br /> */}
+          <br /><br /><h1>BusinessName</h1> <hr />  
+          <button type="submit" className="btn btn-info">Update</button> &nbsp;
+          <button type="submit" className="btn btn-danger">Delete</button>
+          <hr /><br />
           <div className="row">
             <div className="col bg-info">
               <h3><br />About BusinessName</h3>
@@ -69,4 +84,16 @@ class BusinessOne extends Component {
   }
 }
 
-export default BusinessOne;
+BusinessOne.propTypes = {
+  getBusinessMessage: PropTypes.object.isRequired,
+  getBusiness:PropTypes.func.isRequired,
+  business: PropTypes.object
+}
+
+const mapStateToProps = state =>({
+  getBusinessMessage:state.getBusiness.getBusinessMessage,
+  getBusiness:PropTypes.func.isRequired,
+  business:state.getBusiness.getBusinessMessage
+});
+
+export default withRouter(connect(mapStateToProps,{getBusiness})(BusinessOne));
