@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
@@ -11,6 +12,18 @@ import AuthNavigationBar from './authNavigationBar';
 
 class BusinessRegister extends Component {
 
+  componentWillMount=()=>{
+
+    var userToken = sessionStorage.getItem("access_token");
+    const userDecoded = decode(userToken);
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+      this.props.history.push("/register-business")
+    }
+    else{
+      this.props.history.push("/")
+    }
+  }
+  
   componentWillReceiveProps(receivedProp){
     console.log(receivedProp)
     if(receivedProp.registerBizMessage.message){

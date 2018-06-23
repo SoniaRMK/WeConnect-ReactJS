@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
@@ -12,7 +13,15 @@ import AuthNavigationBar from './authNavigationBar';
 class BusinessesList extends Component {
 
   componentWillMount=()=>{
-    this.props.getBusinesses();
+
+    var userToken = sessionStorage.getItem("access_token");
+    const userDecoded = decode(userToken);
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+      this.props.getBusinesses();
+    }
+    else{
+      this.props.history.push("/")
+    }
   }
 
   render() {
@@ -94,7 +103,7 @@ class BusinessesList extends Component {
                   <tbody>
                     {businesses.map((business, index) =>
                     <tr key={business[index].id}>
-                    <td><a href="/businesses/:bizid"> {business[index].BusinessName}</a></td>
+                    <td><a href="/businesses/${bizid}"> {business[index].BusinessName}</a></td>
                     <td> {business[index].Category}</td>
                     <td> {business[index].Location}</td>
                     {console.log(business)}
