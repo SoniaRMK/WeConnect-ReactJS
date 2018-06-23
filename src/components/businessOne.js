@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getBusiness } from '../actions/getOneBusinessActions';
@@ -10,22 +11,27 @@ import AuthNavigationBar from './authNavigationBar';
 class BusinessOne extends Component {
 
   componentWillMount=()=>{
-    this.props.getBusiness();
-  }
 
-  // const business = this.props.getBusinessMessage;
-  //   if (business){
-  //     Array.prototype.reverse.call(business)
-  //   }
+    var userToken = sessionStorage.getItem("access_token");
+    const userDecoded = decode(userToken);
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+      this.props.getBusiness();
+    }
+    else{
+      this.props.history.push("/")
+    }
+  }
 
   render() {
     return (
       <div className="App">
         <AuthNavigationBar/>
          <div className="container">
-          <br /><br /><h1>BusinessName</h1> <hr />  
-          <button type="submit" className="btn btn-info">Update</button> &nbsp;
-          <button type="submit" className="btn btn-danger">Delete</button>
+          <br /><br /><h1>BusinessName</h1> <hr /> 
+          <div className="row"> 
+            <form action="#"><button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}>Update</button></form> &nbsp;
+            <form action="#"><button type="submit" className="btn btn-danger">Delete</button></form>
+          </div>
           <hr /><br />
           <div className="row">
             <div className="col bg-info">
