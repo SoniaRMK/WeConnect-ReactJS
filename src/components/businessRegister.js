@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import decode from 'jwt-decode';
+import {NotificationManager} from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -12,7 +14,7 @@ import AuthNavigationBar from './authNavigationBar';
 
 class BusinessRegister extends Component {
 
-  componentWillMount=()=>{
+  componentDidMount=()=>{
 
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
@@ -27,9 +29,15 @@ class BusinessRegister extends Component {
   componentWillReceiveProps(receivedProp){
     console.log(receivedProp)
     if(receivedProp.registerBizMessage.message){
-      console.log(receivedProp.registerBizMessage.message)
-      this.props.history.push("/businesses")
+      if(receivedProp.registerBizMessage.message === "Business registered!"){
+        NotificationManager.success("Business registered!","", 5000);
+        this.props.history.push("/businesses")
+      }else{
+        NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
+        console.log(receivedProp.registerBizMessage.message)
+      }
     }
+    
   }
 
   registerBizDataStringify = (object) =>{
@@ -73,30 +81,31 @@ class BusinessRegister extends Component {
                 </div>
                 <div className="form-group">
                   <select className="form-control" id="location" name="location" required="required">
-                    <option>Business Location</option>
-                    <option>Mbarara</option>
-                    <option>Kampala</option>
-                    <option>Gulu</option>
-                    <option>Soroti</option>
-                    <option>Hoima</option>
-                    <option>Kabarole</option>
+                    <option value="">Business Location</option> 
+                    <option value="Mbarara">Mbarara</option>
+                    <option value="Kampala">Kampala</option>
+                    <option value="Gulu">Gulu</option>
+                    <option value="Soroti">Soroti</option>
+                    <option value="Hoima">Hoima</option>
+                    <option value="Kabarole">Kabarole</option>
                   </select>
                   <br />
                   <select className="form-control" id="category" name="category" required="required">
-                    <option>Business Category</option>  
-                    <option>Consulting</option>
-                    <option>Telecommunications</option>
-                    <option>Food and Beverages</option>
-                    <option>Computing and Technology</option>
-                    <option>Hotels and Accommodation</option>
-                    <option>Arts and Crafts</option>
+                    <option value="">Business Category</option>  
+                    <option value="Consulting">Consulting</option>
+                    <option value="Telecommunications">Telecommunications</option>
+                    <option value="Food and Beverages">Food and Beverages</option>
+                    <option value="Computing and Technology">Computing and Technology</option>
+                    <option value="Hotels and Accommodation">Hotels and Accommodation</option>
+                    <option value="Arts and Crafts">Arts and Crafts</option>
                   </select>
                 </div>
                 <div className="form-group">
                   <textarea className="form-control" placeholder="Enter Description of the business" id="descr" name="descr" required="required" />
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary" style={{width: '50%', marginLeft: '25%', backgroundColor: '#fff', borderColor: '#14a2b8', color: '#14a2b8'}}>Register</button>
+                <button type="submit" className="btn btn-primary" style={{width: '25%', marginLeft: '25%', backgroundColor: '#fff', borderColor: '#14a2b8', color: '#14a2b8'}}>Register</button>
+                <a className="btn btn-warning" style={{width: '25%', borderColor: '#14a2b8', color: '#fff'}} href="/businesses" role="button">Cancel</a>
               </form><br /><br />
             </div>
         </div>

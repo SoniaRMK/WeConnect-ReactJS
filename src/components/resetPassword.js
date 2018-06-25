@@ -2,19 +2,39 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import decode from 'jwt-decode';
+import {NotificationManager} from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthNavigationBar from './authNavigationBar';
 import {resetPassword} from '../actions/userActions';
 
 class ResetPassword extends Component {
 
-  componentWillReceiveProps(receivedProp){
-    console.log(receivedProp)
-    if(receivedProp.resetPasswordMessage.message){
-      console.log(receivedProp.resetPasswordMessage.message)
-      
+  componentDidMount=()=>{
+
+    var userToken = sessionStorage.getItem("access_token");
+    const userDecoded = decode(userToken);
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+       this.props.history.push("/reset-password")
+    }
+    else{
       this.props.history.push("/")
+    }
+  }
+
+  componentWillReceiveProps(receivedProp){
+    if(receivedProp.resetPasswordMessage.message){
+      if(receivedProp.resetPasswordMessage.message === "Password Reset"){
+        console.log(receivedProp.resetPasswordMessage.message)
+        NotificationManager.success(receivedProp.resetPasswordMessage.message,"", 5000);
+        sessionStorage.removeItem("access_token")
+        this.props.history.push("/")
+      }else{
+        NotificationManager.error(receivedProp.resetPasswordMessage.message,"", 5000);
+      }
+      
     }
   }
   

@@ -1,84 +1,141 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 import decode from 'jwt-decode';
+import {NotificationManager} from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getBusiness } from '../actions/getOneBusinessActions';
+import { getBusiness, deleteBusiness, addReview, getReviews } from '../actions/getOneBusinessActions';
 import AuthNavigationBar from './authNavigationBar';
 
 class BusinessOne extends Component {
 
-  componentWillMount=()=>{
+  componentDidMount=()=>{
 
     var userToken = sessionStorage.getItem("access_token");
-    const userDecoded = decode(userToken);
+    var userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
-      this.props.getBusiness();
+      const bizId = this.props.match.params.bizid
+      this.props.getBusiness(bizId)
+      this.props.getReviews(bizId);
     }
-    else{
+    else {
       this.props.history.push("/")
     }
   }
 
+  deleteOneBusiness=()=>{
+    this.props.deleteBusiness(this.props.match.params.bizid)
+    this.props.history.push("/businesses")
+    NotificationManager.success("Business successfully deleted", "", 5000);
+    
+  }
+
+  reviewBusinessDataStringify = (object) =>{
+    let simpleObj={};
+        for (let prop in object){
+            if (!object.hasOwnProperty(prop)){
+                continue;
+            }
+            if (typeof(object[prop]) === 'object'){
+                continue;
+            }
+            simpleObj[prop] = object[prop];
+        }
+        return JSON.stringify(simpleObj);
+      }
+
+  addOneReview=(event)=>{
+    event.preventDefault();
+    let reviewBusinessData={
+      review_title:event.target.elements.reviewTitle.value,
+      review_msg:event.target.elements.reviweMsg.value
+    };
+    const bizId = this.props.match.params.bizid
+    this.props.addReview(bizId, this.reviewBusinessDataStringify(reviewBusinessData))
+    window.location.reload();
+  }
+
+  notificationMessage=()=>{
+    if(this.props.getReviewsMessage.message){
+      NotificationManager.warning(this.props.getReviewsMessage.message,"", 5000);
+    }
+  }
+
   render() {
+
+    const oneBusiness=this.props.getBusinessMessage.business;
+    const reviews=Object.values({...this.props.getReviewsMessage.Reviews});
+    console.log(reviews)
+    
+    if(oneBusiness){
+      console.log(oneBusiness)
+      var businessCreatedBy = oneBusiness.CreatedBy
+      var businessName = oneBusiness.BusinessName
+      var businessProfile = oneBusiness.BusinessProfile
+      var businessCategory = oneBusiness.Category
+      var businessLocation = oneBusiness.Location
+    }
+    var userToken = sessionStorage.getItem("access_token");
+    var userDecoded = decode(userToken);
+    if (userDecoded.username === businessCreatedBy){
+      document.getElementById("deleteEdit").className = "row show";
+      document.getElementById("line").className = "show";
+      document.getElementById("addReviewDiv").className = "collapse";
+    }
+    if (reviews){
+      Array.prototype.reverse.call(reviews)
+      console.log(reviews)
+    }       
+    
     return (
       <div className="App">
         <AuthNavigationBar/>
          <div className="container">
-          <br /><br /><h1>BusinessName</h1> <hr /> 
-          <div className="row"> 
+          <br /><br /><h1>{businessName}</h1> <hr /> 
+          <div className="row collapse" id="deleteEdit">   
             <form action="#"><button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}>Update</button></form> &nbsp;
-            <form action="#"><button type="submit" className="btn btn-danger">Delete</button></form>
+            <form onSubmit={this.deleteOneBusiness}><button type="submit" className="btn btn-danger">Delete</button></form>
           </div>
-          <hr /><br />
-          <div className="row">
+          <hr className="collapse" id="line"/>
+          <div className="row"><br />
             <div className="col bg-info">
-              <h3><br />About BusinessName</h3>
+              <h3 style={{textAlign:'center', color: '#000'}}><br />About {businessName}</h3>
+              <h6 style={{textAlign:'center', color: '#f0f8ff'}}>{businessCategory} | {businessLocation}</h6>
+              <hr style={{backgroundColor: '#000'}}/>
               <p>
-                <br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar
-                elit a elit aliquam, non iaculis ex eleifend. Sed enim orci, iaculis eu
-                ipsum at, accumsan scelerisque lectus. Class aptent taciti sociosqu ad
-                litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum
-                in quam viverra mi sagittis pretium quis a tortor. Ut congue gravida suscipit.
-                <br />
-                <br />Nunc blandit nibh non enim auctor, in pharetra tortor elementum. Mauris
-                nec quam ut enim posuere posuere in eu lacus. Sed pharetra varius magna
-                sed elementum. Curabitur convallis dui tellus, et lobortis urna porttitor
-                vitae. Cras at enim justo. Etiam euismod elit sapien, eget congue dolor
-                convallis sollicitudin.
+                {businessProfile}
               </p>
             </div>
-            <div className="col bg-light">
+            <div className="col bg-light show" id="addReviewDiv" style={{border: '2px solid #14a2b8'}}>
               <h3 style={{textAlign: 'center', color:'#17a2b8'}}><br />Add a Review</h3><br/>
-              <form action="#">
+              <form onSubmit={this.addOneReview}>
                 <div className="form-group" style={{border: '2px solid #14a2b8', borderRadius: '7px'}}>
-                  <input type="text" className="form-control" id="reviewTitle" placeholder="Enter the review title" required="required"/>
+                  <input type="text" className="form-control" name="reviewTitle" placeholder="Enter the review title" required="required"/>
                 </div>
                 <div className="form-group" style={{border: '2px solid #14a2b8', borderRadius: '7px'}}>
-                  <textarea className="form-control" rows={5} id="reviweMsg" placeholder="Enter the review message" required="required"/>
+                  <textarea className="form-control" rows={5} name="reviweMsg" placeholder="Enter the review message" required="required"/>
                 </div><br /><br />
                 <div className="form-group">
-                  <button type="submit" className="btn btn-primary" style={{width: '50%', marginLeft: '25%', backgroundColor: '#14a2b8', borderColor: '#14a2b8', color: '#fff'}}>Submit</button>
+                  <button type="submit" className="btn btn-info" style={{width: '50%', marginLeft: '25%', borderColor: '#14a2b8', color: '#fff'}}>Submit</button>
                 </div>
               </form>
             </div>
           </div>
           <div className="row">
-            <div className="col bg-white">
-              <h3 style={{textAlign: 'center', color:'#17a2b8'}}><br />Reviews</h3>
-              <hr/>
-              <table className="table table-borderless">
-                <thead>
-                  <tr>
-                    <th>Review Title</th>
-                  </tr>
-                </thead>
+            <div className="col bg-white" style={{border: '2px solid #14a2b8'}}>
+              <h3 onClick={this.notificationMessage} style={{textAlign: 'center', color:'rgb(240, 248, 255)', cursor:' pointer', background: '#14a2b8', paddingBottom: '30px', marginTop: '20px', borderRadius: '10px'}} data-toggle="collapse" data-target="#reviews"><br />Reviews</h3>
+              {/* <hr style={{backgroundColor: '#14a2b8', height: '6px', borderRadius: '10px'}}/> */}
+              <table className="table table-striped collapse" id="reviews">
                 <tbody>
-                  <tr>
-                    <td>Review Message</td>
-                  </tr>
+                  {reviews.map((review, index) =>(
+                  <tr key={index+1} style={{borderBottom: '6px solid #14a2b8', borderTop: '6px solid #14a2b8'}}>
+                    <th  style={{color: '#14a2b8'}}>{review['Review Title']}</th>
+                    <td>{review['Review Message']} <br/><br/><strong><i>Reviewed By: {review['Reviewd By']}</i></strong></td>
+                  </tr>)
+                  )}
                 </tbody>
               </table>
               <br /><br />
@@ -92,14 +149,21 @@ class BusinessOne extends Component {
 
 BusinessOne.propTypes = {
   getBusinessMessage: PropTypes.object.isRequired,
+  deleteBusinessMessage: PropTypes.object.isRequired,
+  addReviewMessage: PropTypes.object.isRequired,
+  getReviewsMessage: PropTypes.object.isRequired,
   getBusiness:PropTypes.func.isRequired,
+  deleteBusiness: PropTypes.func.isRequired,
+  addReview:PropTypes.func.isRequired,
+  getReviews: PropTypes.func.isRequired,
   business: PropTypes.object
 }
 
 const mapStateToProps = state =>({
   getBusinessMessage:state.getBusiness.getBusinessMessage,
-  getBusiness:PropTypes.func.isRequired,
-  business:state.getBusiness.getBusinessMessage
+  deleteBusinessMessage:state.getBusiness.deleteBusinessMessage,
+  addReviewMessage: state.getBusiness.addReviewMessage,
+  getReviewsMessage: state.getBusiness.getReviewsMessage
 });
 
-export default withRouter(connect(mapStateToProps,{getBusiness})(BusinessOne));
+export default withRouter(connect(mapStateToProps,{getBusiness, deleteBusiness, addReview, getReviews})(BusinessOne));

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import decode from 'jwt-decode';
+import {NotificationManager} from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -12,23 +14,37 @@ import AuthNavigationBar from './authNavigationBar';
 
 class BusinessesList extends Component {
 
-  componentWillMount=()=>{
+  componentDidMount=()=>{
 
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
       this.props.getBusinesses();
+      // NotificationManager.success("welcome to Weconnect ","", 5000);
     }
     else{
       this.props.history.push("/")
     }
   }
 
-  render() {
+filterBusinesses=(event)=>{
+  event.preventDefault();
+  let location = event.target.elements.location.value
+  let category = event.target.elements.category.value
+  let q = event.target.elements.search_term.value
+  let limit = 6
+  this.props.getBusinesses(q, location, category, limit)
+}
 
-    const businesses=Object.values({...this.props.getBusinessesMessage});
+  render() {
+    if(this.props.getBusinessesMessage.message){
+      NotificationManager.warning(this.props.getBusinessesMessage.message,"", 5000);
+    }
+    const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     if (businesses){
       Array.prototype.reverse.call(businesses)
+    }else{
+      NotificationManager.error("No businesses found","", 5000);
     }
 
     return (
@@ -40,60 +56,38 @@ class BusinessesList extends Component {
           <hr/>
           <br/>
           <div className="row">
-              <div>
+              <div className="col-2">
                 <a href ="/register-business">
                   <button type="button" className="btn btn-info btn-sm">Register Business</button>
                 </a>
               </div>
-              <div style={{marginLeft:'80px',}}><strong>&nbsp;&nbsp;&nbsp;Filter By:&nbsp;&nbsp;&nbsp;</strong>
-                <div className="btn-group">
-                  <a className="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" href="#">Location <span className="caret"></span></a>&nbsp;&nbsp;&nbsp;
-                  <ul className="dropdown-menu">
-                    <li className="dropdown-item"><a href="#">Kabarole</a>
-                    </li>
-                    <li className="dropdown-item"><a href="#">Kampala</a>
-                    </li>
-                    <li className="dropdown-item"><a href="#">Gulu</a>
-                    </li>
-                    <li className="dropdown-item"><a href="#">Soroti</a>
-                    </li>
-                    <li className="dropdown-item"><a href="#">Hoima</a>
-                    </li>
-                    <li className="divider dropdown-item"></li>
-                    <li className="dropdown-item"><a href="#">Other</a>
-                    </li>
-                    </ul>
-                </div>
-                <div className="btn-group"> <a className="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" href="#">Category <span className="caret"></span></a>
-					        <ul className="dropdown-menu">
-                      <li className="dropdown-item"><a href="#">Telecommunications</a>
-                      </li>
-                      <li className="dropdown-item"><a href="#">Food and Bar</a>
-                      </li>
-                      <li className="dropdown-item"><a href="#">Computing and Technology</a>
-                      </li>
-                      <li className="dropdown-item"><a href="#">Hotels and Accommodation</a>
-                      </li>
-                      <li className="dropdown-item"><a href="#">Arts and Crafts</a>
-                      </li>
-                      <li className="divider dropdown-item"></li>
-                      <li className="dropdown-item"><a href="#">Other</a>
-                      </li>
-                  </ul>
-				        </div>
-              </div>
-              <div>
-                <div className="input-group" style={{marginLeft:'120px',}}>
-                  <input type="text" className="form-control" placeholder="Search" name="search" style={{height:'38px',}}/>
-                  <div className="input-group-btn">
-                  <button type="button" className="btn btn-info btn-sm" style={{borderRadius:'unset',}}>search</button>
-                  </div>
-                </div>
-              </div>
-              <div>
+                <form className="form-inline" onSubmit={this.filterBusinesses}>
+                  <select className="form-control mb-2 mr-sm-2" name="category">
+                    <option value="">Business Category</option>  
+                    <option value="Consulting">Consulting</option>
+                    <option value="Telecommunications">Telecommunications</option>
+                    <option value="Food and Beverages">Food and Beverages</option>
+                    <option value="Computing and Technology">Computing and Technology</option>
+                    <option value="Hotels and Accommodation">Hotels and Accommodation</option>
+                    <option value="Arts and Crafts">Arts and Crafts</option>
+                  </select>
+                  <select className="form-control mb-2 mr-sm-2" name="location">
+                    <option value="">Business Location</option> 
+                    <option value="Mbarara">Mbarara</option>
+                    <option value="Kampala">Kampala</option>
+                    <option value="Gulu">Gulu</option>
+                    <option value="Soroti">Soroti</option>
+                    <option value="Hoima">Hoima</option>
+                    <option value="Kabarole">Kabarole</option>
+                  </select>
+                  
+                  <input type="text" className="form-control mb-2 mr-sm-2" name="search_term" placeholder="Enter search term"/>    
+                  <button type="submit" className="btn btn-info mb-2">Search</button>
+                </form>
+              <div style = {{width:'100%'}}>
               <br/><br/>
-                <table className="table table-borderless">
-                  <thead>
+                <table className="table">
+                  <thead className="thead-light">
                     <tr>
                       <th>Business Name</th>
                       <th>Category</th>
@@ -101,16 +95,15 @@ class BusinessesList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {businesses.map((business, index) =>
-                    <tr key={business[index].id}>
-                    <td><a href="/businesses/${bizid}"> {business[index].BusinessName}</a></td>
-                    <td> {business[index].Category}</td>
-                    <td> {business[index].Location}</td>
-                    {console.log(business)}
-                    </tr>
+                    {businesses.map((business, index) =>(
+                    <tr key={business['id']}>
+                    <td><NavLink to={`/businesses/${business.id}`} style={{textDecoration: 'None'}}> {business['BusinessName']}</NavLink></td>
+                    <td> {business['Category']}</td>
+                    <td> {business['Location']}</td>
+                    </tr>)
                     )}
                   </tbody>
-                </table>
+                </table><br/><br/><br/>
               </div>
             </div>
         </div>

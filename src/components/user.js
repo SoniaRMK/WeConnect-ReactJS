@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import {NotificationManager} from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavigationBar from './navigationBar';
 import {signUp, logIn} from '../actions/userActions';
@@ -10,13 +12,24 @@ import {signUp, logIn} from '../actions/userActions';
 class User extends Component {
 
   componentWillReceiveProps(receivedProp){
-    console.log(receivedProp)
-    if(receivedProp.userSignMessage.message){
-      console.log(receivedProp.userSignMessage.message)}
-    else {
+    if(receivedProp.userSignMessage.Message){
+      if(receivedProp.userSignMessage.Message !== "User registered!"){
+        NotificationManager.error(receivedProp.userSignMessage.Message,"", 5000);
+      }
+      else{
+        NotificationManager.success(receivedProp.userSignMessage.Message,"", 5000)
+        //window.location.reload();
+      }
+    } 
+    else{
       if(receivedProp.userLoginMessage.token){
-      sessionStorage.setItem('access_token', receivedProp.userLoginMessage.token)
-      this.props.history.push("/businesses")}
+        sessionStorage.setItem('access_token', receivedProp.userLoginMessage.token)
+        // console.log(receivedProp.userLoginMessage.username)
+        this.props.history.push("/businesses")
+      }
+      else {
+        NotificationManager.error("Wrong password or Incorrect email entered!", "", 5000);
+      }
     }
   }
   
@@ -42,7 +55,6 @@ class User extends Component {
       user_email:event.target.elements.email.value,
       user_password:event.target.elements.psswd.value
     };
-    console.log(userData);
     this.props.signUp(this.userDataStringify(userData))
   }
 
@@ -52,22 +64,24 @@ class User extends Component {
       user_email:event.target.elements.email.value,
       user_password:event.target.elements.password.value
     };
-    console.log(userData);
     this.props.logIn(this.userDataStringify(userData))
   }
 
   render() {
+    const userName = this.props.userLoginMessage.username;
+    console.log(userName)
     return (
       <div className="User">
-        <NavigationBar/>     
+      <NavigationBar/>
         <div className="container">
           <h3 style={{color:'#505050'}}>
             <br/>
               WeConnect provides a platform that brings businesses and individuals together.<br/><br/>
               This platform creates awareness for businesses and gives the user the ability to write reviews about the 
-              businesses they have interacted with. 
+              businesses they have interacted with.
             <br/><br/>
           </h3>
+          <h1 style={{color:'rgb(20, 162, 184)', textAlign:'center'}}>Express Yourself. Let them know!</h1><br/><br/>
           <div className="row" style={{border:'5px solid #17a2b8'}}>
             <div className="col-6 bg-light" id="login">
             <br/><h2 style={{color:'#17a2b8'}}>Login</h2><br/><br/>
@@ -83,7 +97,7 @@ class User extends Component {
                     <input className="form-check-input" type="checkbox" name="remember"/> Remember me</label>
                 </div><br /><br/>
                 <button type="submit" className="btn btn-info" style={{float:'left'}}>Submit</button>
-                <a className="btn btn-link" href="#" style={{color:'#17a2b8', float:'left'}}>Forgot Your Password?</a>
+                <a className="btn btn-link" href="/" style={{color:'#17a2b8', float:'left'}}>Forgot Your Password?</a>
               </form><br /><br />
             </div>
             <div className="col-6 bg-info" id="userReg">
@@ -93,7 +107,7 @@ class User extends Component {
                   <input type="text" className="form-control" id="userName" placeholder="Enter a Username" name="userName" required="required" />
                 </div>
                 <div className="form-group">
-                  <input type="email" className="form-control" id="emailReg" placeholder="Enter email" name="email" required="required" />
+                  <input type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="email" required="required" />
                 </div>
                 <div className="form-group">
                   <input type="password" className="form-control" id="psswd" placeholder="Enter password" name="psswd" required="required"/>

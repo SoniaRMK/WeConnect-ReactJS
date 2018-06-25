@@ -1,6 +1,10 @@
 export const SIGN_USER = 'SIGN_USER';
 export const LOGIN_USER = 'LOGIN_USER';
+export const LOGOUT_USER = 'LOGOUT_USER';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const REGISTER_BUSINESS = 'REGISTER_BUSINESS';
 export const GET_ALL_BUSINESSES = 'GET_ALL_BUSINESSES';
 export const GET_ONE_BUSINESS = 'GET_ONE_BUSINESS';
+export const DELETE_BUSINESS = 'DELETE_BUSINESS';
+export const ADD_REVIEW = 'ADD_REVIEW';
+export const GET_REVIEWS = 'GET_REVIEWS';

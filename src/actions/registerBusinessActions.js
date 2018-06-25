@@ -2,7 +2,6 @@ import { REGISTER_BUSINESS} from './types';
 
 export const registerBusiness=(registerBusinessData)=>dispatch => {
     console.log('Registering Business...');
-    console.log('Bearer ' + sessionStorage.getItem('access_token'));
     if (registerBusinessData){
 
         const options = {

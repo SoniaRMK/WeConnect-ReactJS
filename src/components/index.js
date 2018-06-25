@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {NotificationContainer} from 'react-notifications';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import User from './user';
@@ -9,6 +10,7 @@ import BusinessesList from './businessesList';
 import Contact from './contact';
 import BusinessRegister from './businessRegister';
 import ResetPassword from './resetPassword';
+import LogoutUser from './logout';
 
 class Index extends Component {
   
@@ -22,6 +24,7 @@ class Index extends Component {
           <Route exact strict path={"/businesses"} component={BusinessesList}/>
           <Route exact strict path={"/register-business"} component={BusinessRegister}/>
           <Route exact strict path={"/reset-password"} component={ResetPassword}/>
+          <Route exact strict path={"/logout"} component={LogoutUser}/>
           <Route exact strict path={"/contact"} component={Contact}/>
         </div>
       </Router>
@@ -29,6 +32,7 @@ class Index extends Component {
     return (
       <div className="App" style={{ background:'aliceblue' }}>
         <Routes/>
+        <NotificationContainer/>
         <FooterBar/>
       </div>
     );
