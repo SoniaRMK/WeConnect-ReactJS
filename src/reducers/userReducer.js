@@ -1,8 +1,9 @@
-import { SIGN_USER, LOGIN_USER, RESET_PASSWORD } from '../actions/types';
+import { SIGN_USER, LOGIN_USER, LOGOUT_USER, RESET_PASSWORD } from '../actions/types';
 
 const initialState = {
     signUpMessage:{},
     loggedInToken:{},
+    loggedOutMessage: {},
     resetPasswordMessage:{}
 }
 
@@ -15,6 +16,9 @@ export default (state = initialState, action)=>{
             console.log('reducer...')
             return {...state,
             loggedInToken: action.token}
+        case LOGOUT_USER:
+            return {...state, 
+            loggedOutMessage: action.payload}
         case RESET_PASSWORD:
             return {...state,
             resetPasswordMessage: action.payload}

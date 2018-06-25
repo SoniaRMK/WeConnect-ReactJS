@@ -25,8 +25,8 @@ class BusinessesList extends Component {
   }
 
   render() {
-
-    const businesses=Object.values({...this.props.getBusinessesMessage});
+    console.log(this.props.getBusinessesMessage)
+    const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     if (businesses){
       Array.prototype.reverse.call(businesses)
     }
@@ -101,13 +101,14 @@ class BusinessesList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {businesses.map((business, index) =>
-                    <tr key={business[index].id}>
-                    <td><a href="/businesses/${bizid}"> {business[index].BusinessName}</a></td>
-                    <td> {business[index].Category}</td>
-                    <td> {business[index].Location}</td>
+                    {businesses.map((business, index) =>(
+                    <tr key={business['id']}>
+                    <td><a href="/businesses/${bizid}"> {business['BusinessName']}</a></td>
+                    <td> {business['Category']}</td>
+                    <td> {business['Location']}</td>
+                    {console.log(businesses)}
                     {console.log(business)}
-                    </tr>
+                    </tr>)
                     )}
                   </tbody>
                 </table>

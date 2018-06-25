@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthNavigationBar from './authNavigationBar';
@@ -9,11 +10,24 @@ import {resetPassword} from '../actions/userActions';
 
 class ResetPassword extends Component {
 
+  componentWillMount=()=>{
+
+    var userToken = sessionStorage.getItem("access_token");
+    const userDecoded = decode(userToken);
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+       this.props.history.push("/reset-password")
+    }
+    else{
+      this.props.history.push("/")
+    }
+  }
+
   componentWillReceiveProps(receivedProp){
     console.log(receivedProp)
     if(receivedProp.resetPasswordMessage.message){
       console.log(receivedProp.resetPasswordMessage.message)
-      
+      //sessionStorage.setItem('access_token', null)
+      sessionStorage.removeItem("access_token")
       this.props.history.push("/")
     }
   }

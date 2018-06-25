@@ -19,7 +19,7 @@ class AuthNavigationBar extends Component {
                   <ul className="nav navbar-nav ml-auto" style={{fontSize: '18px'}}>
                       <li className="nav-item"><a href="/businesses" style={{color: '#fff'}} className="nav-link">Businesses</a></li>
                       <li className="nav-item"><a href="/reset-password" style={{color: '#fff'}} className="nav-link">Reset Password</a></li>
-                      <li className="nav-item"><a href="/" style={{color: '#fff'}} className="nav-link">Logout</a></li>
+                      <li className="nav-item"><a href="/logout" style={{color: '#fff'}} className="nav-link">Logout</a></li>
                       <li className="nav-item"><a href="/contact" style={{color: '#fff'}} className="nav-link">Contact</a></li>
                   </ul>
               </div>

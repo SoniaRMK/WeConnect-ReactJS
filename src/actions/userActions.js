@@ -1,4 +1,4 @@
-import { SIGN_USER, LOGIN_USER, RESET_PASSWORD } from './types';
+import { SIGN_USER, LOGIN_USER, LOGOUT_USER, RESET_PASSWORD } from './types';
 
 export const signUp=(signUPData)=>dispatch => {
     console.log('Signing Up...');
@@ -41,6 +41,26 @@ export const logIn=(loginData)=>dispatch => {
     
     }
 }
+
+export const logOut=()=>dispatch => {
+        console.log('logging Out...');
+        const options = {
+            method:'POST', 
+            headers:{
+                'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
+                'Content-Type':'application/json'}};
+        fetch(`http://127.0.0.1:5000/api/v2/auth/logout`,options)
+       .then (response => response.json())
+       .then (data=> dispatch(
+        {
+            type: LOGOUT_USER,
+            payload: data
+        }
+    
+    ))
+    
+}
+
 
 export const resetPassword=(resetPasswordData)=>dispatch => {
     if (resetPasswordData){
