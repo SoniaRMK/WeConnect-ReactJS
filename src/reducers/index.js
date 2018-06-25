@@ -3,6 +3,7 @@ import userReducer from './userReducer';
 import registerBusinessReducer from './registerBusinessReducer';
 import getAllBusinessesReducer from './getAllBusinessesReducer';
 import getAOneBusinessReducer from './getAOneBusinessReducer';
+import { LOGOUT_USER } from '../actions/types';
 
 
 const mainReducer = combineReducers({
@@ -12,4 +13,12 @@ const mainReducer = combineReducers({
     getBusiness: getAOneBusinessReducer
 });
 
-export default mainReducer;
+const rootReducer = ( state, action ) => {
+    if ( action.type === LOGOUT_USER ) {
+      state = undefined;
+    }
+        
+    return mainReducer(state, action)
+  }
+
+export default rootReducer;

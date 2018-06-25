@@ -13,6 +13,7 @@ class User extends Component {
     console.log(receivedProp)
     if(receivedProp.userSignMessage.message){
       console.log(receivedProp.userSignMessage.message)}
+      
     else {
       if(receivedProp.userLoginMessage.token){
       sessionStorage.setItem('access_token', receivedProp.userLoginMessage.token)
@@ -83,7 +84,7 @@ class User extends Component {
                     <input className="form-check-input" type="checkbox" name="remember"/> Remember me</label>
                 </div><br /><br/>
                 <button type="submit" className="btn btn-info" style={{float:'left'}}>Submit</button>
-                <a className="btn btn-link" href="#" style={{color:'#17a2b8', float:'left'}}>Forgot Your Password?</a>
+                <a className="btn btn-link" href="/" style={{color:'#17a2b8', float:'left'}}>Forgot Your Password?</a>
               </form><br /><br />
             </div>
             <div className="col-6 bg-info" id="userReg">

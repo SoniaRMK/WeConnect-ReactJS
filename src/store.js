@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import mainReducer from './reducers';
+import rootReducer from './reducers';
 
 const middleWare = [thunk];
-const Weconnect = createStore(mainReducer, applyMiddleware(...middleWare));
+const Weconnect = createStore(rootReducer, applyMiddleware(...middleWare));
 
 export default  Weconnect;
 
