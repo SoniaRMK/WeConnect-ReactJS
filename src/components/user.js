@@ -14,6 +14,7 @@ class User extends Component {
 
   componentWillReceiveProps(receivedProp){
     if(receivedProp.userSignMessage.Message){
+      console.log(receivedProp.userSignMessage)
       if(receivedProp.userSignMessage.Message !== "User registered!"){
         NotificationManager.error(receivedProp.userSignMessage.Message,"", 5000);
       }

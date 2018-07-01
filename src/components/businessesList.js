@@ -52,7 +52,8 @@ class BusinessesList extends Component {
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
     const nextPage = this.props.getBusinessesMessage.nextPage;
-    console.log(this.props.getBusinessesMessage.prevPage)
+    console.log(this.props.getBusinessesMessage.nextPage)
+    console.log(businesses)
 
     if (businesses){
       Array.prototype.reverse.call(businesses)
@@ -124,8 +125,8 @@ class BusinessesList extends Component {
                   </tbody>
                 </table>
                 <ul className="pagination justify-content-end">
-                  <li className="page-item"><a className="page-link" href={prevPage}>Previous</a></li>
-                  <li className="page-item"><a className="page-link" href={nextPage}>Next</a></li>
+                  <li className="page-item"><NavLink to={`/businesses?pages=${prevPage}`} className="page-link">Previous</NavLink></li>
+                  <li className="page-item"><NavLink to={`/businesses?pages=${nextPage}`} className="page-link">Next</NavLink></li>
                 </ul>
                 <br/><br/><br/>
               </div>
@@ -144,7 +145,9 @@ BusinessesList.propTypes = {
 const mapStateToProps = (state, ownProps) =>({
   getBusinessesMessage:state.getBusinesses.getBusinessesMessage,
   getBusinesses:PropTypes.func.isRequired,
-  businesses:state.getBusinesses.getBusinessesMessage
+  // businesses:state.getBusinesses.getBusinessesMessage,
+  // nextPage: state.getBusinesses.getBusinessesMessage.nextPage,
+  // prevPage: state.getBusinesses.getBusinessesMessage.prevPage
 });
 
 export default withRouter(connect(mapStateToProps,{getBusinesses})(BusinessesList));
