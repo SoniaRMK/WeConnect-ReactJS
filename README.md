@@ -1,5 +1,8 @@
 # WeConnect React-Redux App
 
+[![Build Status](https://travis-ci.org/SoniaRMK/WeConnect-ReactJS.svg?branch=reset-user-password)](https://travis-ci.org/SoniaRMK/WeConnect-ReactJS)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b0b8e2fe387306d29bdf/maintainability)](https://codeclimate.com/github/SoniaRMK/WeConnect-ReactJS/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/SoniaRMK/WeConnect-ReactJS/badge.svg?branch=reset-user-password)](https://coveralls.io/github/SoniaRMK/WeConnect-ReactJS?branch=reset-user-password)
 ## Getting started
 
 You can view a live demo over at https://weconnect-redux.herokuapp.com/

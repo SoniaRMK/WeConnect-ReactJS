@@ -9,7 +9,7 @@ export const signUp=(signUPData)=>dispatch => {
             body:signUPData, 
             headers:{
                 'Content-Type':'application/json'}};
-       fetch(`http://127.0.0.1:5000/api/v2/auth/register`,options)
+       fetch(`/api/v2/auth/register`,options)
        .then (response => response.json())
        .then (data=> {
            dispatch(
@@ -29,7 +29,7 @@ export const logIn=(loginData)=>dispatch => {
             body:loginData, 
             headers:{
                 'Content-Type':'application/json'}};
-       fetch(`http://127.0.0.1:5000/api/v2/auth/login`,options)
+       fetch(`/api/v2/auth/login`,options)
        .then (response => response.json())
        .then (data => {
             dispatch({
@@ -48,8 +48,7 @@ export const logOut=()=>dispatch => {
             headers:{
                 'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
                 'Content-Type':'application/json'}};
-        fetch(`http://127.0.0.1:5000/api/v2/auth/logout`,options)
-       .then (response => response.json())
+        fetch(`/v2/auth/logout`,options)
        .then (data=> dispatch(
         {
             type: LOGOUT_USER,
@@ -70,7 +69,7 @@ export const resetPassword=(resetPasswordData)=>dispatch => {
             headers:{
                 'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
                 'Content-Type':'application/json'}};
-       fetch(`http://127.0.0.1:5000/api/v2/auth/reset-password`,options)
+       fetch(`/api/v2/auth/reset-password`,options)
        .then (response => response.json())
        .then (data=> dispatch(
         {

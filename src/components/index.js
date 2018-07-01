@@ -9,6 +9,7 @@ import BusinessOne from './businessOne';
 import BusinessesList from './businessesList';
 import Contact from './contact';
 import BusinessRegister from './businessRegister';
+import EditBusiness from './editBusiness';
 import ResetPassword from './resetPassword';
 import LogoutUser from './logout';
 
@@ -23,6 +24,7 @@ class Index extends Component {
           <Route exact strict path={"/businesses/:bizid"} component={BusinessOne}/>
           <Route exact strict path={"/businesses"} component={BusinessesList}/>
           <Route exact strict path={"/register-business"} component={BusinessRegister}/>
+          <Route exact strict path={"/edit-business/:businessID"} component={EditBusiness}/>
           <Route exact strict path={"/reset-password"} component={ResetPassword}/>
           <Route exact strict path={"/logout"} component={LogoutUser}/>
           <Route exact strict path={"/contact"} component={Contact}/>

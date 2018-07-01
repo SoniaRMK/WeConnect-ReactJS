@@ -10,7 +10,7 @@ export const registerBusiness=(registerBusinessData)=>dispatch => {
             headers:{
                 'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
                 'Content-Type':'application/json'}};
-       fetch(`http://127.0.0.1:5000/api/v2/businesses`, options)
+       fetch(`/api/v2/businesses`, options)
        .then (response => response.json())
        .then (data => dispatch(
         {

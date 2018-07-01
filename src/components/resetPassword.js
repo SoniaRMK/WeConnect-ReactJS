@@ -59,8 +59,11 @@ class ResetPassword extends Component {
       user_email:event.target.elements.email.value,
       user_password:event.target.elements.psswd.value
     };
-    console.log(userData);
-    this.props.resetPassword(this.userDataStringify(userData))
+    if (event.target.elements.psswd.value !== event.target.elements.psswd1.value){
+      NotificationManager.error("Passwords donot match!", "", 5000);
+    }else{
+      this.props.resetPassword(this.userDataStringify(userData))
+    }
   }
 
   render() {

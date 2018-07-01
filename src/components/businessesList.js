@@ -20,31 +20,48 @@ class BusinessesList extends Component {
     const userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
       this.props.getBusinesses();
-      // NotificationManager.success("welcome to Weconnect ","", 5000);
     }
     else{
       this.props.history.push("/")
     }
   }
 
-filterBusinesses=(event)=>{
-  event.preventDefault();
-  let location = event.target.elements.location.value
-  let category = event.target.elements.category.value
-  let q = event.target.elements.search_term.value
-  let limit = 6
-  this.props.getBusinesses(q, location, category, limit)
-}
+  filterBusinesses=(event)=>{
+    event.preventDefault();
+    let location = event.target.elements.location.value
+    let category = event.target.elements.category.value
+    let q = event.target.elements.search_term.value
+    this.props.getBusinesses(q, location, category)
+  }
+
+  clearFilters=()=>{
+    window.location.reload();
+  }
+
+  businessesNotFound=()=>{
+    if(this.props.getBusinessesMessage.message === "No businesses found"){
+      return(
+        <div class="alert alert-success">
+        <strong>Success!</strong> Indicates a successful or positive action.
+      </div>
+      )
+    }
+  }
 
   render() {
-    if(this.props.getBusinessesMessage.message){
-      NotificationManager.warning(this.props.getBusinessesMessage.message,"", 5000);
-    }
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
+    const prevPage = this.props.getBusinessesMessage.prevPage;
+    const nextPage = this.props.getBusinessesMessage.nextPage;
+    console.log(this.props.getBusinessesMessage.prevPage)
+
     if (businesses){
       Array.prototype.reverse.call(businesses)
     }else{
       NotificationManager.error("No businesses found","", 5000);
+    }
+
+    if(this.props.getBusinessesMessage.message === "No businesses found"){
+      document.getElementById("noBusinesses").className = "show";
     }
 
     return (
@@ -58,11 +75,11 @@ filterBusinesses=(event)=>{
           <div className="row">
               <div className="col-2">
                 <a href ="/register-business">
-                  <button type="button" className="btn btn-info btn-sm">Register Business</button>
+                  <button type="button" className="btn btn-info btn-sm" style={{paddingBottom: '11px'}}>Register Business</button>
                 </a>
               </div>
                 <form className="form-inline" onSubmit={this.filterBusinesses}>
-                  <select className="form-control mb-2 mr-sm-2" name="category">
+                  <select className="form-control mb-2 mr-sm-2" name="category" style={{width: '240px'}} >
                     <option value="">Business Category</option>  
                     <option value="Consulting">Consulting</option>
                     <option value="Telecommunications">Telecommunications</option>
@@ -82,8 +99,9 @@ filterBusinesses=(event)=>{
                   </select>
                   
                   <input type="text" className="form-control mb-2 mr-sm-2" name="search_term" placeholder="Enter search term"/>    
-                  <button type="submit" className="btn btn-info mb-2">Search</button>
+                  <button type="submit" className="btn btn-info mb-2">Search</button> &nbsp;
                 </form>
+                <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear filters</button>
               <div style = {{width:'100%'}}>
               <br/><br/>
                 <table className="table">
@@ -95,15 +113,21 @@ filterBusinesses=(event)=>{
                     </tr>
                   </thead>
                   <tbody>
-                    {businesses.map((business, index) =>(
-                    <tr key={business['id']}>
-                    <td><NavLink to={`/businesses/${business.id}`} style={{textDecoration: 'None'}}> {business['BusinessName']}</NavLink></td>
-                    <td> {business['Category']}</td>
-                    <td> {business['Location']}</td>
-                    </tr>)
+                  <tr className="collapse" id="noBusinesses"><td>No Businesses found</td></tr>
+                   {businesses.map((business, index) =>(
+                      <tr key={business['id']}>
+                      <td><NavLink to={`/businesses/${business.id}`} style={{textDecoration: 'None'}}> {business['BusinessName']}</NavLink></td>
+                      <td> {business['Category']}</td>
+                      <td> {business['Location']}</td>
+                      </tr>)
                     )}
                   </tbody>
-                </table><br/><br/><br/>
+                </table>
+                <ul className="pagination justify-content-end">
+                  <li className="page-item"><a className="page-link" href={prevPage}>Previous</a></li>
+                  <li className="page-item"><a className="page-link" href={nextPage}>Next</a></li>
+                </ul>
+                <br/><br/><br/>
               </div>
             </div>
         </div>
@@ -117,7 +141,7 @@ BusinessesList.propTypes = {
   businesses: PropTypes.object
 }
 
-const mapStateToProps = state =>({
+const mapStateToProps = (state, ownProps) =>({
   getBusinessesMessage:state.getBusinesses.getBusinessesMessage,
   getBusinesses:PropTypes.func.isRequired,
   businesses:state.getBusinesses.getBusinessesMessage

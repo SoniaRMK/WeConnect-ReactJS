@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter} from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import decode from 'jwt-decode';
 import {NotificationManager} from 'react-notifications';
+import changeCase from 'change-case';
 
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,9 +28,12 @@ class BusinessOne extends Component {
   }
 
   deleteOneBusiness=()=>{
-    this.props.deleteBusiness(this.props.match.params.bizid)
-    this.props.history.push("/businesses")
-    NotificationManager.success("Business successfully deleted", "", 5000);
+    const popup = window.confirm('Are you sure you want to delete this business?'); 
+    if (popup === true) {
+      this.props.deleteBusiness(this.props.match.params.bizid)
+      this.props.history.push("/businesses")
+      NotificationManager.success("Business successfully deleted", "", 5000);
+    }
     
   }
 
@@ -59,8 +63,8 @@ class BusinessOne extends Component {
   }
 
   notificationMessage=()=>{
-    if(this.props.getReviewsMessage.message){
-      NotificationManager.warning(this.props.getReviewsMessage.message,"", 5000);
+      if(this.props.getReviewsMessage.message === "Business doesn't have reviews yet!!"){
+        document.getElementById("noReviews").className = "show";
     }
   }
 
@@ -68,10 +72,10 @@ class BusinessOne extends Component {
 
     const oneBusiness=this.props.getBusinessMessage.business;
     const reviews=Object.values({...this.props.getReviewsMessage.Reviews});
-    console.log(reviews)
     
     if(oneBusiness){
       console.log(oneBusiness)
+      var businessID = oneBusiness.id
       var businessCreatedBy = oneBusiness.CreatedBy
       var businessName = oneBusiness.BusinessName
       var businessProfile = oneBusiness.BusinessProfile
@@ -87,7 +91,6 @@ class BusinessOne extends Component {
     }
     if (reviews){
       Array.prototype.reverse.call(reviews)
-      console.log(reviews)
     }       
     
     return (
@@ -96,7 +99,7 @@ class BusinessOne extends Component {
          <div className="container">
           <br /><br /><h1>{businessName}</h1> <hr /> 
           <div className="row collapse" id="deleteEdit">   
-            <form action="#"><button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}>Update</button></form> &nbsp;
+            <button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}><NavLink to={`/edit-business/${businessID}`} style={{textDecoration: 'None', color: 'white'}}>Update</NavLink></button>&nbsp;
             <form onSubmit={this.deleteOneBusiness}><button type="submit" className="btn btn-danger">Delete</button></form>
           </div>
           <hr className="collapse" id="line"/>
@@ -126,14 +129,14 @@ class BusinessOne extends Component {
           </div>
           <div className="row">
             <div className="col bg-white" style={{border: '2px solid #14a2b8'}}>
-              <h3 onClick={this.notificationMessage} style={{textAlign: 'center', color:'rgb(240, 248, 255)', cursor:' pointer', background: '#14a2b8', paddingBottom: '30px', marginTop: '20px', borderRadius: '10px'}} data-toggle="collapse" data-target="#reviews"><br />Reviews</h3>
-              {/* <hr style={{backgroundColor: '#14a2b8', height: '6px', borderRadius: '10px'}}/> */}
-              <table className="table table-striped collapse" id="reviews">
+              <h3 onClick={this.notificationMessage} style={{textAlign: 'center', color:'rgb(240, 248, 255)', cursor:' pointer', background: '#14a2b8', paddingBottom: '30px', marginTop: '20px', borderRadius: '10px'}} data-toggle="collapse" data-target="#reviews"><br />View Reviews</h3>
+              <table className="table table-striped" id="reviews">
                 <tbody>
+                  <tr className="collapse" id="noReviews"><th style={{textAlign: 'center', fontSize: '1.5em'}}>No reviews yet</th></tr>
                   {reviews.map((review, index) =>(
-                  <tr key={index+1} style={{borderBottom: '6px solid #14a2b8', borderTop: '6px solid #14a2b8'}}>
+                  <tr className="show" id="reviews" key={index+1} style={{borderBottom: '6px solid #14a2b8', borderTop: '6px solid #14a2b8'}}>
                     <th  style={{color: '#14a2b8'}}>{review['Review Title']}</th>
-                    <td>{review['Review Message']} <br/><br/><strong><i>Reviewed By: {review['Reviewd By']}</i></strong></td>
+                    <td>{review['Review Message']} <br/><br/><strong><i>Reviewed By: {changeCase.titleCase(review['Reviewd By'])}</i></strong></td>
                   </tr>)
                   )}
                 </tbody>

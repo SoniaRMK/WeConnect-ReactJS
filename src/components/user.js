@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {NotificationManager} from 'react-notifications';
+import $ from 'jquery';
 
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,14 +18,15 @@ class User extends Component {
         NotificationManager.error(receivedProp.userSignMessage.Message,"", 5000);
       }
       else{
-        NotificationManager.success(receivedProp.userSignMessage.Message,"", 5000)
-        //window.location.reload();
+        //window.location.reload()
+        // document.getElementById("userRegister").reset();
+        NotificationManager.success("User registered!","", 5000)
+        document.location.replace("/")
       }
     } 
     else{
       if(receivedProp.userLoginMessage.token){
         sessionStorage.setItem('access_token', receivedProp.userLoginMessage.token)
-        // console.log(receivedProp.userLoginMessage.username)
         this.props.history.push("/businesses")
       }
       else {
@@ -55,7 +57,12 @@ class User extends Component {
       user_email:event.target.elements.email.value,
       user_password:event.target.elements.psswd.value
     };
-    this.props.signUp(this.userDataStringify(userData))
+    if (event.target.elements.psswd.value !== event.target.elements.psswd1.value){
+      NotificationManager.error("Passwords donot match!", "", 5000);
+    }else{
+      this.props.signUp(this.userDataStringify(userData))
+    }
+    
   }
 
   loginUser=(event)=>{
@@ -68,8 +75,9 @@ class User extends Component {
   }
 
   render() {
-    const userName = this.props.userLoginMessage.username;
-    console.log(userName)
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
     return (
       <div className="User">
       <NavigationBar/>
@@ -102,15 +110,15 @@ class User extends Component {
             </div>
             <div className="col-6 bg-info" id="userReg">
               <br/><h2 style={{color:'#fff'}}>Register Account</h2><br/><br/>
-              <form onSubmit={this.registerUser}>
+              <form onSubmit={this.registerUser} id="userRegister">
                 <div className="form-group">
                   <input type="text" className="form-control" id="userName" placeholder="Enter a Username" name="userName" required="required" />
                 </div>
                 <div className="form-group">
-                  <input type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="email" required="required" />
+                  <input data-toggle="popover" title="Email Guideline" data-content="Email example: weconnect@gmail.com" type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="email" required="required" />
                 </div>
                 <div className="form-group">
-                  <input type="password" className="form-control" id="psswd" placeholder="Enter password" name="psswd" required="required"/>
+                  <input data-toggle="popover" title="Password Guideline" data-content="Password should be atleast 8 characters long" type="password" className="form-control" id="psswd" placeholder="Enter password" name="psswd" required="required"/>
                 </div>
                 <div className="form-group">
                   <input type="password" className="form-control" id="psswd1" placeholder="Confirm password" name="psswd1" required="required" />

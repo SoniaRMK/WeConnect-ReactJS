@@ -1,8 +1,9 @@
-import { GET_ONE_BUSINESS, DELETE_BUSINESS, ADD_REVIEW, GET_REVIEWS } from '../actions/types';
+import { GET_ONE_BUSINESS, DELETE_BUSINESS, EDIT_BUSINESS, ADD_REVIEW, GET_REVIEWS } from '../actions/types';
 
 const initialState = {
     getBusinessMessage:{},
     deleteBusinessMessage: {},
+    editBusinessMessage: {},
     addReviewMessage: {},
     getReviewsMessage: {}
 }
@@ -17,6 +18,11 @@ export default (state = initialState, action)=>{
         console.log('Reducing business..');
             return {...state, 
                 deleteBusinessMessage: action.payload}
+        case EDIT_BUSINESS:
+        console.log('Reducing business..');
+            return {...state, 
+                editBusinessMessage: action.payload}
+
         case ADD_REVIEW:
         console.log('Reducing business..');
             return {...state, 

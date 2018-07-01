@@ -1,4 +1,4 @@
-import {GET_ONE_BUSINESS, DELETE_BUSINESS, ADD_REVIEW, GET_REVIEWS} from './types';
+import {GET_ONE_BUSINESS, DELETE_BUSINESS, EDIT_BUSINESS, ADD_REVIEW, GET_REVIEWS} from './types';
 
 export const getBusiness=(bizId)=>dispatch => {
     console.log('Getting one Business...');
@@ -8,7 +8,7 @@ export const getBusiness=(bizId)=>dispatch => {
         headers:{
             'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
             'Content-Type':'application/json'}};
-    fetch(`http://127.0.0.1:5000/api/v2/businesses/${bizId}`, options)
+    fetch(`/api/v2/businesses/${bizId}`, options)
     .then (response => response.json())
     .then (data => dispatch(
     {
@@ -28,7 +28,7 @@ export const deleteBusiness=(bizId)=>dispatch => {
         headers:{
             'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
             'Content-Type':'application/json'}};
-    fetch(`http://127.0.0.1:5000/api/v2/businesses/${bizId}`, options)
+    fetch(`/api/v2/businesses/${bizId}`, options)
     .then (response => response.json())
     .then (data => {
         dispatch(
@@ -51,12 +51,34 @@ export const addReview=(bizId, reviewData)=>dispatch => {
         headers:{
             'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
             'Content-Type':'application/json'}};
-    fetch(`http://127.0.0.1:5000/api/v2/businesses/${bizId}/reviews`, options)
+    fetch(`/api/v2/businesses/${bizId}/reviews`, options)
     .then (response => response.json())
     .then (data => {
         dispatch(
             {
                 type: ADD_REVIEW,
+                payload: data
+            }
+        );
+    })
+    
+}
+
+export const editBusiness=(bizId, businessData)=>dispatch => {
+    console.log('adding a review to Business...');
+
+    const options = {
+        method:'PUT',
+        body:businessData,
+        headers:{
+            'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
+            'Content-Type':'application/json'}};
+    fetch(`/api/v2/businesses/${bizId}`, options)
+    .then (response => response.json())
+    .then (data => {
+        dispatch(
+            {
+                type: EDIT_BUSINESS,
                 payload: data
             }
         );
@@ -72,7 +94,7 @@ export const getReviews=(bizId)=>dispatch => {
         headers:{
             'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
             'Content-Type':'application/json'}};
-    fetch(`http://127.0.0.1:5000/api/v2/businesses/${bizId}/reviews`, options)
+    fetch(`/api/v2/businesses/${bizId}/reviews`, options)
     .then (response => response.json())
     .then (data => {
         dispatch(
