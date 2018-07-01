@@ -49,11 +49,16 @@ class BusinessesList extends Component {
   }
 
   render() {
+<<<<<<< HEAD
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
     const nextPage = this.props.getBusinessesMessage.nextPage;
     console.log(this.props.getBusinessesMessage.prevPage)
 
+=======
+    console.log(this.props.getBusinessesMessage)
+    const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
+>>>>>>> cf7e78aea59f2833c7edd71363aa52a0e98a01d8
     if (businesses){
       Array.prototype.reverse.call(businesses)
     }else{
