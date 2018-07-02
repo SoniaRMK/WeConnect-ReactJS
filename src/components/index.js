@@ -3,15 +3,14 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {NotificationContainer} from 'react-notifications';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import User from './user';
-import FooterBar from './footerBar';
-import BusinessOne from './businessOne';
-import BusinessesList from './businessesList';
-import Contact from './contact';
-import BusinessRegister from './businessRegister';
-import EditBusiness from './editBusiness';
-import ResetPassword from './resetPassword';
-import LogoutUser from './logout';
+import User from './user/user';
+import FooterBar from './navBar/footerBar';
+import BusinessOne from './business/business';
+import BusinessesList from './business/businesses';
+import BusinessRegister from './business/register';
+import EditBusiness from './business/edit';
+import ResetPassword from './user/resetPassword';
+import LogoutUser from './user/logout';
 
 class Index extends Component {
   
@@ -27,7 +26,6 @@ class Index extends Component {
           <Route exact strict path={"/edit-business/:businessID"} component={EditBusiness}/>
           <Route exact strict path={"/reset-password"} component={ResetPassword}/>
           <Route exact strict path={"/logout"} component={LogoutUser}/>
-          <Route exact strict path={"/contact"} component={Contact}/>
         </div>
       </Router>
     )

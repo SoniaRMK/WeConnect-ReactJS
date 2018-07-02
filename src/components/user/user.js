@@ -7,8 +7,8 @@ import $ from 'jquery';
 
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavigationBar from './navigationBar';
-import {signUp, logIn} from '../actions/userActions';
+import NavigationBar from '../navBar/navigationBar';
+import {signUp, logIn} from '../../actions/userActions';
 
 class User extends Component {
 

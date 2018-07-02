@@ -7,8 +7,8 @@ import {NotificationManager} from 'react-notifications';
 
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AuthNavigationBar from './authNavigationBar';
-import {resetPassword} from '../actions/userActions';
+import AuthNavigationBar from '../navBar/authNavigationBar';
+import {resetPassword} from '../../actions/userActions';
 
 class ResetPassword extends Component {
 

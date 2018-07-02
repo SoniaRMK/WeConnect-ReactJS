@@ -8,8 +8,8 @@ import changeCase from 'change-case';
 
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getBusiness, deleteBusiness, addReview, getReviews } from '../actions/getOneBusinessActions';
-import AuthNavigationBar from './authNavigationBar';
+import { getBusiness, deleteBusiness, addReview, getReviews } from '../../actions/getOneBusinessActions';
+import AuthNavigationBar from '../navBar/authNavigationBar';
 
 class BusinessOne extends Component {
 

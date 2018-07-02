@@ -9,8 +9,8 @@ import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
-import { getBusinesses } from '../actions/getAllBusinessesActions';
-import AuthNavigationBar from './authNavigationBar';
+import { getBusinesses } from '../../actions/getAllBusinessesActions';
+import AuthNavigationBar from '../navBar/authNavigationBar';
 
 class BusinessesList extends Component {
 
@@ -40,11 +40,34 @@ class BusinessesList extends Component {
 
   businessesNotFound=()=>{
     if(this.props.getBusinessesMessage.message === "No businesses found"){
-      return(
-        <div class="alert alert-success">
-        <strong>Success!</strong> Indicates a successful or positive action.
-      </div>
-      )
+      return "show"
+    }
+    else{
+      return "collapse"
+    }
+  }
+
+  paginationPrev=(prevPage)=>{
+    if(prevPage === undefined){
+      return "collapse"
+    }
+    else if(prevPage === null){
+      return "page-item disabled"
+    }
+    else{
+      return "page-item"
+    }
+  }
+
+  paginationNext=(nextPage)=>{
+    if(nextPage === undefined){
+      return "collapse"
+    }
+    else if(nextPage === null){
+      return "page-item disabled"
+    }
+    else{
+      return "page-item"
     }
   }
 
@@ -52,8 +75,12 @@ class BusinessesList extends Component {
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
     const nextPage = this.props.getBusinessesMessage.nextPage;
-    console.log(this.props.getBusinessesMessage.nextPage)
-    console.log(businesses)
+    let paramsPrev = ["","", "", prevPage];
+    let paramsNext = ["", "", "", nextPage];
+    let nextClass = this.paginationNext(nextPage)
+    let prevClass = this.paginationPrev(prevPage)
+    let businessNotFound = this.businessesNotFound()
+
 
     if (businesses){
       Array.prototype.reverse.call(businesses)
@@ -64,7 +91,7 @@ class BusinessesList extends Component {
     if(this.props.getBusinessesMessage.message === "No businesses found"){
       document.getElementById("noBusinesses").className = "show";
     }
-
+    
     return (
       <div className="businessesList">
         <AuthNavigationBar/>
@@ -114,7 +141,7 @@ class BusinessesList extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                  <tr className="collapse" id="noBusinesses"><td>No Businesses found</td></tr>
+                  <tr className={businessNotFound} id="noBusinesses"><th style = {{textAlign: 'center', fontWeight: 'bold', fontSize: '1.5em', color: 'red'}}>No Businesses found</th></tr>
                    {businesses.map((business, index) =>(
                       <tr key={business['id']}>
                       <td><NavLink to={`/businesses/${business.id}`} style={{textDecoration: 'None'}}> {business['BusinessName']}</NavLink></td>
@@ -124,11 +151,12 @@ class BusinessesList extends Component {
                     )}
                   </tbody>
                 </table>
-                <ul className="pagination justify-content-end">
-                  <li className="page-item"><NavLink to={`/businesses?pages=${prevPage}`} className="page-link">Previous</NavLink></li>
-                  <li className="page-item"><NavLink to={`/businesses?pages=${nextPage}`} className="page-link">Next</NavLink></li>
-                </ul>
-                <br/><br/><br/>
+                <br/><br/>
+                  <ul className="pagination justify-content-end" id="paginateSect">
+                    <li className={prevClass} id="prev"><NavLink to={`/businesses?page=${prevPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsPrev)}>Previous</span></NavLink></li>
+                    <li className={nextClass} id="next"><NavLink to={`/businesses?page=${nextPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsNext)}>Next</span></NavLink></li>
+                  </ul>
+                <br/>
               </div>
             </div>
         </div>
@@ -142,12 +170,9 @@ BusinessesList.propTypes = {
   businesses: PropTypes.object
 }
 
-const mapStateToProps = (state, ownProps) =>({
+const mapStateToProps = (state) =>({
   getBusinessesMessage:state.getBusinesses.getBusinessesMessage,
-  getBusinesses:PropTypes.func.isRequired,
-  // businesses:state.getBusinesses.getBusinessesMessage,
-  // nextPage: state.getBusinesses.getBusinessesMessage.nextPage,
-  // prevPage: state.getBusinesses.getBusinessesMessage.prevPage
+  getBusinesses:PropTypes.func.isRequired
 });
 
 export default withRouter(connect(mapStateToProps,{getBusinesses})(BusinessesList));

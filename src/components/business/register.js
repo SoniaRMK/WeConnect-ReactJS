@@ -5,41 +5,42 @@ import { withRouter } from 'react-router-dom';
 import decode from 'jwt-decode';
 import {NotificationManager} from 'react-notifications';
 
-import Weconnect from '../store';
-
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
-import { editBusiness } from '../actions/getOneBusinessActions';
-import AuthNavigationBar from './authNavigationBar';
+import {registerBusiness} from '../../actions/registerBusinessActions';
+import AuthNavigationBar from '../navBar/authNavigationBar';
 
-class EditBusiness extends Component {
+class BusinessRegister extends Component {
 
   componentDidMount=()=>{
+
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
-    if ((userToken === null) || (userDecoded.exp < Date.now() / 1000)) {
-      console.log(this.props)
+    if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
+      this.props.history.push("/register-business")
+    }
+    else{
       this.props.history.push("/")
     }
   }
-
+  
   componentWillReceiveProps(receivedProp){
     console.log(receivedProp)
-    if(receivedProp.editBusinessMessage.message){
-      if(receivedProp.editBusinessMessage.message === "Business successfully Updated!"){
-        NotificationManager.success("Business successfully Updated!","", 5000);
+    if(receivedProp.registerBizMessage.message){
+      if(receivedProp.registerBizMessage.message === "Business registered!"){
+        NotificationManager.success("Business registered!","", 5000);
         this.props.history.push("/businesses")
       }else{
         NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
-        console.log(receivedProp.editBusinessMessage.message)
+        console.log(receivedProp.registerBizMessage.message)
       }
     }
     
   }
 
-  updateBizDataStringify = (object) =>{
+  registerBizDataStringify = (object) =>{
     let simpleObj={};
         for (let prop in object){
             if (!object.hasOwnProperty(prop)){
@@ -54,7 +55,7 @@ class EditBusiness extends Component {
 
   }
 
-  editOneBusiness=(event)=>{
+  registerBiz=(event)=>{
     event.preventDefault();
     let businessData={
       business_name:event.target.elements.businessName.value,
@@ -62,21 +63,10 @@ class EditBusiness extends Component {
       location:event.target.elements.location.value,
       category:event.target.elements.category.value
     };
-    const bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id
-    this.props.editBusiness(bizId, this.updateBizDataStringify(businessData))
+    this.props.registerBusiness(this.registerBizDataStringify(businessData))
   }
 
   render() {
-    console.log(Weconnect.getState().getBusiness.getBusinessMessage.business)
-    if(Weconnect.getState().getBusiness.getBusinessMessage.business){
-      var businessName = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessName;
-      var businessProfile = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessProfile;
-      var businessLocation = Weconnect.getState().getBusiness.getBusinessMessage.business.Location;
-      var businessCategory = Weconnect.getState().getBusiness.getBusinessMessage.business.Category;
-      }
-    else{
-      this.props.history.push(`/businesses/${Weconnect.getState().getBusiness.getBusinessMessage.business.id}`)
-    }
     return (
       <div className="businessRegister">
         <AuthNavigationBar/>
@@ -84,14 +74,14 @@ class EditBusiness extends Component {
        <div className="container">
         <div className="row">
             <div className="col bg-info">
-              <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Edit business</h4><br/>
-              <form onSubmit={this.editOneBusiness}>
+              <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Register a business</h4><br/>
+              <form onSubmit={this.registerBiz}>
                 <div className="form-group">
-                  <input type="text" className="form-control" defaultValue={businessName} id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
+                  <input type="text" className="form-control" id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
                 </div>
                 <div className="form-group">
                   <select className="form-control" id="location" name="location" required="required">
-                    <option defaultValue="{businessLocation}">{businessLocation}</option> 
+                    <option value="">Business Location</option> 
                     <option value="Mbarara">Mbarara</option>
                     <option value="Kampala">Kampala</option>
                     <option value="Gulu">Gulu</option>
@@ -101,7 +91,7 @@ class EditBusiness extends Component {
                   </select>
                   <br />
                   <select className="form-control" id="category" name="category" required="required">
-                    <option defaultValue="{businessCategory}">{businessCategory}</option>  
+                    <option value="">Business Category</option>  
                     <option value="Consulting">Consulting</option>
                     <option value="Telecommunications">Telecommunications</option>
                     <option value="Food and Beverages">Food and Beverages</option>
@@ -111,10 +101,10 @@ class EditBusiness extends Component {
                   </select>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control" defaultValue={businessProfile} placeholder="Enter Description of the business" id="descr" name="descr" required="required" />
+                  <textarea className="form-control" placeholder="Enter Description of the business" id="descr" name="descr" required="required" />
                 </div>
                 <br />
-                <button type="submit" className="btn btn-primary" style={{width: '25%', marginLeft: '25%', backgroundColor: '#fff', borderColor: '#14a2b8', color: '#14a2b8'}}>Update</button>
+                <button type="submit" className="btn btn-primary" style={{width: '25%', marginLeft: '25%', backgroundColor: '#fff', borderColor: '#14a2b8', color: '#14a2b8'}}>Register</button>
                 <a className="btn btn-warning" style={{width: '25%', borderColor: '#14a2b8', color: '#fff'}} href="/businesses" role="button">Cancel</a>
               </form><br /><br />
             </div>
@@ -125,13 +115,13 @@ class EditBusiness extends Component {
   }
 }
 
-EditBusiness.propTypes = {
-  editBusiness:PropTypes.func.isRequired,
-  editBusinessMessage: PropTypes.object.isRequired,
+BusinessRegister.propTypes = {
+  registerBizMessage: PropTypes.object,
+  registerBusiness: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  editBusinessMessage:state.getBusiness.editBusinessMessage,
+const mapStateToProps = state => ({
+  registerBizMessage: state.registerBusiness.registerBusinessMessage
 });
 
-export default withRouter(connect(mapStateToProps, {editBusiness})(EditBusiness));
+export default withRouter(connect(mapStateToProps, {registerBusiness})(BusinessRegister));

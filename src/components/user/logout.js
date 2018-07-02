@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {logOut} from '../actions/userActions';
+import {logOut} from '../../actions/userActions';
 
 class LogoutUser extends Component {
 
