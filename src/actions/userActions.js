@@ -28,7 +28,9 @@ export const logIn=(loginData)=>dispatch => {
             method:'POST',
             body:loginData, 
             headers:{
-                'Content-Type':'application/json'}};
+                'Content-Type':'application/json'}
+        };
+        
        fetch(`/api/v2/auth/login`,options)
        .then (response => response.json())
        .then (data => {
@@ -48,7 +50,7 @@ export const logOut=()=>dispatch => {
             headers:{
                 'Authorization': 'Bearer ' + sessionStorage.getItem('access_token'),
                 'Content-Type':'application/json'}};
-        fetch(`/v2/auth/logout`,options)
+        fetch(`/api/v2/auth/logout`,options)
        .then (data=> dispatch(
         {
             type: LOGOUT_USER,
