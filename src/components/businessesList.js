@@ -25,6 +25,12 @@ class BusinessesList extends Component {
   }
 
   render() {
+
+    const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
+    const prevPage = this.props.getBusinessesMessage.prevPage;
+    const nextPage = this.props.getBusinessesMessage.nextPage;
+    console.log(this.props.getBusinessesMessage.prevPage)
+
     console.log(this.props.getBusinessesMessage)
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     if (businesses){
