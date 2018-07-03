@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/SoniaRMK/WeConnect-ReactJS.svg?branch=reset-user-password)](https://travis-ci.org/SoniaRMK/WeConnect-ReactJS)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b0b8e2fe387306d29bdf/maintainability)](https://codeclimate.com/github/SoniaRMK/WeConnect-ReactJS/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/SoniaRMK/WeConnect-ReactJS/badge.svg?branch=reset-user-password)](https://coveralls.io/github/SoniaRMK/WeConnect-ReactJS?branch=reset-user-password)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b0b8e2fe387306d29bdf/test_coverage)](https://codeclimate.com/github/SoniaRMK/WeConnect-ReactJS/test_coverage)
 ## Getting started
 
 You can view a live demo over at https://weconnect-redux.herokuapp.com/
@@ -27,7 +28,7 @@ This platform creates awareness for businesses and gives the users the ability t
 
 - Authenticate users via JWT (login/signup pages + logout button)
 - CRUD Businesses
-- CR** Comments on articles (no updating required)
+- CR** Reviews on businesses (no updating and deleting required)
 - GET and display paginated lists of Businesses
 - search for businesses and filter businesses per location and/or category
 
