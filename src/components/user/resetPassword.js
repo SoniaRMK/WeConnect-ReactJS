@@ -62,7 +62,7 @@ class ResetPassword extends Component {
           <div className="row" style={{border:'5px solid #17a2b8'}}>
             <div className="col-12 bg-info" id="resetpassword">
               <br/><h2 style={{color:'#fff', textAlign: 'center'}}>Reset Password</h2><br/><br/>
-              <form onSubmit={this.resetUserPassword}>
+              <form onSubmit={this.resetUserPassword} className="resetPassword">
                 <div className="form-group">
                   <input type="email" className="form-control" id="emailReg" placeholder="Enter email" name="email" required="required" />
                 </div>

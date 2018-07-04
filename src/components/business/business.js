@@ -59,13 +59,36 @@ class BusinessOne extends Component {
     }
   }
 
+  hideEditButtons=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "row show"
+    }else{
+      return "row collapse"
+    }
+  }
+
+  hideAddReviewForm=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "collapse"
+    }else{
+      return "col bg-light show"
+    }
+  }
+
+  hideLine=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "show"
+    }else{
+      return "collapse"
+    }
+  }
+
   render() {
 
     const oneBusiness=this.props.getBusinessMessage.business;
     const reviews=Object.values({...this.props.getReviewsMessage.Reviews});
     
     if(oneBusiness){
-      console.log(oneBusiness)
       var businessID = oneBusiness.id
       var businessCreatedBy = oneBusiness.CreatedBy
       var businessName = oneBusiness.BusinessName
@@ -77,11 +100,10 @@ class BusinessOne extends Component {
     //condition to either show or hide the Delete and Update buttons depending on the logged in user
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
-    if (userDecoded.username === businessCreatedBy){
-      document.getElementById("deleteEdit").className = "row show";
-      document.getElementById("line").className = "show";
-      document.getElementById("addReviewDiv").className = "collapse";
-    }
+    let EditDeleteButtonClass = this.hideEditButtons(userDecoded, businessCreatedBy)
+    let LineClass = this.hideLine(userDecoded, businessCreatedBy)
+    let addReviewClass = this.hideAddReviewForm(userDecoded, businessCreatedBy)
+
     if (reviews){
       Array.prototype.reverse.call(reviews)
     }       
@@ -91,11 +113,11 @@ class BusinessOne extends Component {
         <AuthNavigationBar/>
          <div className="container">
           <br /><br /><h1>{businessName}</h1> <hr /> 
-          <div className="row collapse" id="deleteEdit">   
+          <div className={EditDeleteButtonClass} id="deleteEdit">   
             <button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}><NavLink to={`/edit-business/${businessID}`} style={{textDecoration: 'None', color: 'white'}}>Update</NavLink></button>&nbsp;
-            <form onSubmit={this.deleteOneBusiness}><button type="submit" className="btn btn-danger">Delete</button></form>
+            <form onSubmit={this.deleteOneBusiness} className="deleteBusiness"><button type="submit" className="btn btn-danger">Delete</button></form>
           </div>
-          <hr className="collapse" id="line"/>
+          <hr className={LineClass} id="line"/>
           <div className="row"><br />
             <div className="col bg-info">
               <h3 style={{textAlign:'center', color: '#000'}}><br />About {businessName}</h3>
@@ -105,9 +127,9 @@ class BusinessOne extends Component {
                 {businessProfile}
               </p>
             </div>
-            <div className="col bg-light show" id="addReviewDiv" style={{border: '2px solid #14a2b8'}}>
+            <div className={addReviewClass} id="addReviewDiv" style={{border: '2px solid #14a2b8'}}>
               <h3 style={{textAlign: 'center', color:'#17a2b8'}}><br />Add a Review</h3><br/>
-              <form onSubmit={this.addOneReview}>
+              <form onSubmit={this.addOneReview} className="addReviewForm">
                 <div className="form-group" style={{border: '2px solid #14a2b8', borderRadius: '7px'}}>
                   <input type="text" className="form-control" name="reviewTitle" placeholder="Enter the review title" required="required"/>
                 </div>

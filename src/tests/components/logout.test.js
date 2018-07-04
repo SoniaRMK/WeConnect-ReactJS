@@ -5,12 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import mockSessionStorage from '../sessionStorage';
 import decode from 'jwt-decode';
 import jwt from "jsonwebtoken";
-import BusinessesList from '../../components/business/businesses';
+import LogoutUser from '../../components/user/logout';
 
 
-const loginUserMock = { token: jwt.sign({ user_email: "sonia@yahoo.com", user_password: "1234567890" }, "Oxa34KLncvfjKEjXkf")}
-
-describe('BusinessesList component',() => {
+const loginUserMock = { token: jwt.sign({ user_email: "sonia@yahoo.com", user_password: "1234567890" }, "Oxa34KLncvfjKEjXkf") 
+                   };
+describe('user reset password component',() => {
 
     beforeEach(() => {
         Object.defineProperty(window, "sessionStorage", {
@@ -20,12 +20,12 @@ describe('BusinessesList component',() => {
     });
 
     it('should match snapshot',() =>{
-        const wrapper = shallow(<BusinessesList/>)
+        const wrapper = shallow(<LogoutUser/>)
         expect(wrapper).toMatchSnapshot();
     })
 
-    it("should render the BusinessOne component", () => {
-        const userComponent = mount(<MemoryRouter><BusinessesList store = {Weconnect}/></MemoryRouter>)
+    it("should render the logout component", () => {
+        const userComponent = mount(<MemoryRouter><LogoutUser store = {Weconnect}/></MemoryRouter>)
         expect(userComponent.length).toBe(1);
         
     });

@@ -40,11 +40,11 @@ class User extends Component {
   registerUser=(event)=>{
     event.preventDefault();
     let userData={
-      user_name:event.target.elements.userName.value,
-      user_email:event.target.elements.email.value,
-      user_password:event.target.elements.psswd.value
+      user_name:event.target.elements.userNameReg.value,
+      user_email:event.target.elements.emailReg.value,
+      user_password:event.target.elements.psswdReg.value
     };
-    if (event.target.elements.psswd.value !== event.target.elements.psswd1.value){
+    if (event.target.elements.psswdReg.value !== event.target.elements.psswd1Reg.value){
       NotificationManager.error("Passwords donot match!", "", 5000);
     }else{
       this.props.signUp(receivedDataStringify(userData))
@@ -83,7 +83,7 @@ class User extends Component {
           <div className="row" style={{border:'5px solid #17a2b8'}}>
             <div className="col-6 bg-light" id="login">
             <br/><h2 style={{color:'#17a2b8'}}>Login</h2><br/><br/>
-              <form onSubmit={this.loginUser}>
+              <form onSubmit={this.loginUser}  className="userLogin">
                 <div className="form-group" style={{border: '2px solid #14a2b8', borderRadius: '7px'}}>
                   <input type="email" className="form-control" id="emailLogin" placeholder="Enter email" name="email" required="required" />
                 </div>
@@ -102,18 +102,18 @@ class User extends Component {
             </div>
             <div className="col-6 bg-info" id="userReg">
               <br/><h2 style={{color:'#fff'}}>Register Account</h2><br/><br/>
-              <form onSubmit={this.registerUser} id="userRegister">
+              <form onSubmit={this.registerUser} className="userRegister">
                 <div className="form-group">
-                  <input type="text" className="form-control" id="userName" placeholder="Enter a Username" name="userName" required="required" />
+                  <input type="text" className="form-control" id="userName" placeholder="Enter a Username" name="userNameReg" required="required" />
                 </div>
                 <div className="form-group">
-                  <input data-toggle="popover" title="Email Guideline" data-content="Email example: weconnect@gmail.com" type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="email" required="required" />
+                  <input data-toggle="popover" title="Email Guideline" data-content="Email example: weconnect@gmail.com" type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="emailReg" required="required" />
                 </div>
                 <div className="form-group">
-                  <input data-toggle="popover" title="Password Guideline" data-content="Password should be atleast 8 characters long" type="password" className="form-control" id="psswd" placeholder="Enter password" name="psswd" required="required"/>
+                  <input data-toggle="popover" title="Password Guideline" data-content="Password should be atleast 8 characters long" type="password" className="form-control" id="psswdReg" placeholder="Enter password" name="psswdReg" required="required"/>
                 </div>
                 <div className="form-group">
-                  <input type="password" className="form-control" id="psswd1" placeholder="Confirm password" name="psswd1" required="required" />
+                  <input type="password" className="form-control" id="psswd1" placeholder="Confirm password" name="psswd1Reg" required="required" />
                 </div>
                 <button type="submit" className="btn btn-light" style={{color:'#17a2b8'}}>Register</button>
               </form><br /><br />

@@ -47,4 +47,19 @@ describe("register a business actions", () => {
         expect(calledActions).toEqual(expectedActions);
     })
 
+    it('does not create REGISTER_BUSINESS action when business data is not provided', () => {
+        sessionStorage.setItem("access_token", loginUserMock.token);
+        fetchMock.postOnce(`/api/v2/businesses`,
+        { body: {}, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("access_token"), 
+                                      'Content-Type': 'application/json' }})
+        const expectedActions = [
+            { 
+                type: REGISTER_BUSINESS,
+                payload: {}
+            }
+            ];
+        return store.dispatch(actions.registerBusiness());
+        expect(calledActions).toEqual(expectedActions);
+    })
+
 })

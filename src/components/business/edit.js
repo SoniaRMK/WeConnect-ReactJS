@@ -72,7 +72,7 @@ class EditBusiness extends Component {
         <div className="row">
             <div className="col bg-info">
               <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Edit business</h4><br/>
-              <form onSubmit={this.editOneBusiness}>
+              <form onSubmit={this.editOneBusiness} className="editBusinessForm">
                 <div className="form-group">
                   <input type="text" className="form-control" defaultValue={businessName} id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
                 </div>

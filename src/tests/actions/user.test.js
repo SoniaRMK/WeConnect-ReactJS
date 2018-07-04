@@ -47,6 +47,19 @@ describe("user actions", () => {
         expect(calledActions).toEqual(expectedActions);
     })
 
+    it('does not create SIGN_USER action if no user data is provided', () => {
+        fetchMock.postOnce('/api/v2/auth/register',
+        { body: {}, headers: { 'Content-Type': 'application/json' }})
+        const expectedActions = [
+            { 
+                type: SIGN_USER,
+                payload: {} 
+            }
+            ];
+        return store.dispatch(actions.signUp());
+        expect(calledActions).toEqual(expectedActions);
+    })
+
     it('creates LOGIN_USER action after successfully logging in a user', () => {
         fetchMock.postOnce('/api/v2/auth/login',
         { body: loginData, headers: { 'Content-Type': 'application/json' }})
@@ -57,6 +70,19 @@ describe("user actions", () => {
             }
             ];
         return store.dispatch(actions.logIn(loginData));
+        expect(calledActions).toEqual(expectedActions);
+    })
+
+    it('does not create LOGIN_USER action if no user data is provided', () => {
+        fetchMock.postOnce('/api/v2/auth/login',
+        { body: {}, headers: { 'Content-Type': 'application/json' }})
+        const expectedActions = [
+            { 
+                type: LOGIN_USER,
+                payload: {} 
+            }
+            ];
+        return store.dispatch(actions.logIn());
         expect(calledActions).toEqual(expectedActions);
     })
 
@@ -87,6 +113,21 @@ describe("user actions", () => {
             }
             ];
         return store.dispatch(actions.resetPassword(resetPasswordData))
+        expect(calledActions).toEqual(expectedActions);
+    })
+
+    it('does not create RESET_PASSWORD action if no user data is provided', () => {
+        sessionStorage.setItem("access_token", loginUserMock.token);
+        fetchMock.postOnce('/api/v2/auth/reset-password',
+        { body: {}, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("access_token"), 
+                                      'Content-Type': 'application/json' }})
+        const expectedActions = [
+            { 
+                type: RESET_PASSWORD,
+                payload: {}
+            }
+            ];
+        return store.dispatch(actions.resetPassword())
         expect(calledActions).toEqual(expectedActions);
     })
 

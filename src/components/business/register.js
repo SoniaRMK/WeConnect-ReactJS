@@ -63,7 +63,7 @@ class BusinessRegister extends Component {
         <div className="row">
             <div className="col bg-info">
               <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Register a business</h4><br/>
-              <form onSubmit={this.registerBiz}>
+              <form onSubmit={this.registerBiz} className="registerBusinessForm">
                 <div className="form-group">
                   <input type="text" className="form-control" id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
                 </div>

@@ -8,11 +8,15 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 class AuthNavigationBar extends Component {
 
-  render() {
+  userNameCase=()=>{
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
     var userName = changeCase.titleCase(userDecoded.username);
-
+    return userName
+  }; 
+  
+  render() {
+     //var userName = this.userNameCase()
     return (
       <div className="navigationBar">
          <nav className="navbar navbar-expand-md bg-info navbar-dark" style={{cursor: 'pointer'}}>
@@ -27,7 +31,7 @@ class AuthNavigationBar extends Component {
                       <li className="nav-item"><a style={{color: '#fff'}} className="nav-link">Contact</a></li>
                       <li className="nav-item">
                         <div className="dropdown">
-                          <a style={{color: '#fff'}} className="nav-link dropdown-toggle" data-toggle="dropdown">Hello {userName}</a>
+                          <a style={{color: '#fff'}} className="nav-link dropdown-toggle" data-toggle="dropdown">Hello {this.userNameCase()}</a>
                           <div className="dropdown-menu">
                             <a className="dropdown-item" href="/reset-password">Reset Password</a>
                             <a className="dropdown-item" href="/logout">Logout</a>
