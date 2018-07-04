@@ -10,11 +10,13 @@ import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getBusiness, deleteBusiness, addReview, getReviews } from '../../actions/getOneBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 
 class BusinessOne extends Component {
 
   componentDidMount=()=>{
 
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
@@ -27,6 +29,7 @@ class BusinessOne extends Component {
     }
   }
 
+  //Function to delete a business
   deleteOneBusiness=()=>{
     const popup = window.confirm('Are you sure you want to delete this business?'); 
     if (popup === true) {
@@ -37,20 +40,7 @@ class BusinessOne extends Component {
     
   }
 
-  reviewBusinessDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-      }
-
+  //Function to a add to review to a business
   addOneReview=(event)=>{
     event.preventDefault();
     let reviewBusinessData={
@@ -58,10 +48,11 @@ class BusinessOne extends Component {
       review_msg:event.target.elements.reviweMsg.value
     };
     const bizId = this.props.match.params.bizid
-    this.props.addReview(bizId, this.reviewBusinessDataStringify(reviewBusinessData))
+    this.props.addReview(bizId, receivedDataStringify(reviewBusinessData))
     window.location.reload();
   }
 
+  //Notification for when a business has no reviews
   notificationMessage=()=>{
       if(this.props.getReviewsMessage.message === "Business doesn't have reviews yet!!"){
         document.getElementById("noReviews").className = "show";
@@ -82,6 +73,8 @@ class BusinessOne extends Component {
       var businessCategory = oneBusiness.Category
       var businessLocation = oneBusiness.Location
     }
+
+    //condition to either show or hide the Delete and Update buttons depending on the logged in user
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
     if (userDecoded.username === businessCreatedBy){

@@ -8,7 +8,9 @@ import $ from 'jquery';
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavigationBar from '../navBar/navigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 import {signUp, logIn} from '../../actions/userActions';
+import SubmitButton from '../helper/submitButton';
 
 class User extends Component {
 
@@ -19,8 +21,6 @@ class User extends Component {
         NotificationManager.error(receivedProp.userSignMessage.Message,"", 5000);
       }
       else{
-        //window.location.reload()
-        // document.getElementById("userRegister").reset();
         NotificationManager.success("User registered!","", 5000)
         document.location.replace("/")
       }
@@ -36,21 +36,7 @@ class User extends Component {
     }
   }
   
-  userDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-
-  }
-
+  //Function to register a user. Picks values from the register form and sends it to the DB
   registerUser=(event)=>{
     event.preventDefault();
     let userData={
@@ -61,24 +47,27 @@ class User extends Component {
     if (event.target.elements.psswd.value !== event.target.elements.psswd1.value){
       NotificationManager.error("Passwords donot match!", "", 5000);
     }else{
-      this.props.signUp(this.userDataStringify(userData))
+      this.props.signUp(receivedDataStringify(userData))
     }
     
   }
 
+  //Function to login a user
   loginUser=(event)=>{
     event.preventDefault();
     let userData={
       user_email:event.target.elements.email.value,
       user_password:event.target.elements.password.value
     };
-    this.props.logIn(this.userDataStringify(userData))
+    this.props.logIn(receivedDataStringify(userData))
   }
 
   render() {
+    //Used to display tooltips in the input fields
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();   
     });
+    
     return (
       <div className="User">
       <NavigationBar/>
@@ -105,7 +94,9 @@ class User extends Component {
                   <label className="form-check-label" style={{color:'#17a2b8', float:'left'}}>
                     <input className="form-check-input" type="checkbox" name="remember"/> Remember me</label>
                 </div><br /><br/>
-                <button type="submit" className="btn btn-info" style={{float:'left'}}>Submit</button>
+                <div id="login">
+                  <SubmitButton/>
+                </div>
                 <a className="btn btn-link" href="/" style={{color:'#17a2b8', float:'left'}}>Forgot Your Password?</a>
               </form><br /><br />
             </div>

@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationBar component should match snapshot 1`] = `
+<div
+  className="navigationBar"
+>
+  <nav
+    className="navbar navbar-expand-md bg-info navbar-dark"
+  >
+    <div
+      className="container"
+    >
+      <a
+        className="navbar-brand"
+        style={
+          Object {
+            "color": "#fff",
+            "fontSize": "26px",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        WeConnect
+      </a>
+      <button
+        className="navbar-toggler"
+        data-target="#collapsibleNavbar"
+        data-toggle="collapse"
+        style={
+          Object {
+            "border": "2px solid",
+          }
+        }
+        type="button"
+      >
+        <span
+          className="navbar-toggler-icon"
+          style={
+            Object {
+              "border": "2px solid",
+            }
+          }
+        />
+      </button>
+      <div
+        className="collapse navbar-collapse"
+        id="collapsibleNavbar"
+      >
+        <ul
+          className="nav navbar-nav ml-auto"
+          style={
+            Object {
+              "fontSize": "18px",
+            }
+          }
+        >
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              style={
+                Object {
+                  "color": "#fff",
+                }
+              }
+            >
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+`;

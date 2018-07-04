@@ -13,24 +13,25 @@ import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { editBusiness } from '../../actions/getOneBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 
 class EditBusiness extends Component {
 
   componentDidMount=()=>{
+
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken === null) || (userDecoded.exp < Date.now() / 1000)) {
-      console.log(this.props)
       this.props.history.push("/")
     }
   }
 
   componentWillReceiveProps(receivedProp){
-    console.log(receivedProp)
     if(receivedProp.editBusinessMessage.message){
       if(receivedProp.editBusinessMessage.message === "Business successfully Updated!"){
         NotificationManager.success("Business successfully Updated!","", 5000);
-        this.props.history.push("/businesses")
+        document.location.replace("/businesses")
       }else{
         NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
         console.log(receivedProp.editBusinessMessage.message)
@@ -39,21 +40,7 @@ class EditBusiness extends Component {
     
   }
 
-  updateBizDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-
-  }
-
+  //Function to edit a business
   editOneBusiness=(event)=>{
     event.preventDefault();
     let businessData={
@@ -63,20 +50,20 @@ class EditBusiness extends Component {
       category:event.target.elements.category.value
     };
     const bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id
-    this.props.editBusiness(bizId, this.updateBizDataStringify(businessData))
+    this.props.editBusiness(bizId, receivedDataStringify(businessData))
   }
 
   render() {
-    console.log(Weconnect.getState().getBusiness.getBusinessMessage.business)
+
+    /* This makes sure that the edit business form is populated with the previous values 
+       before rendering it for easier editing */
     if(Weconnect.getState().getBusiness.getBusinessMessage.business){
       var businessName = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessName;
       var businessProfile = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessProfile;
       var businessLocation = Weconnect.getState().getBusiness.getBusinessMessage.business.Location;
       var businessCategory = Weconnect.getState().getBusiness.getBusinessMessage.business.Category;
       }
-    else{
-      this.props.history.push(`/businesses/${Weconnect.getState().getBusiness.getBusinessMessage.business.id}`)
-    }
+
     return (
       <div className="businessRegister">
         <AuthNavigationBar/>
