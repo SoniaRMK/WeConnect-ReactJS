@@ -25,22 +25,6 @@ describe('user component',() => {
         expect(userComponent.find("form.userLogin").length).toBe(1);
     });
 
-    // it('checks that the user register form validates', ()=>{
-    //     const userComponent = mount(<MemoryRouter><User store = {Weconnect}/></MemoryRouter>)
-    //     let user_name = userComponent.find('input[name="userNameReg"]')
-    //     user_name.simulate('submit', {target:{elements:{name: "userNameReg", value: ''}}});
-    //     let user_email = userComponent.find('input[name="emailReg"]')
-    //     user_email.simulate('submit', {target:{elements:{emailReg:{value: ''}}}});
-    //     let user_password = userComponent.find('input[name="psswdReg"]')
-    //     user_password.simulate('submit', {target:{elements:{psswdReg:{value: ''}}}});
-    //     let confirm_password = userComponent.find('input[name="psswd1Reg"]')
-    //     confirm_password.simulate('submit', {target:{elements:{psswd1Reg:{value: ''}}}});
-    //     expect(errors.user_email).toBe("This field is required");
-    //     expect(errors.user_name).toBe("This field is required");
-    //     expect(errors.user_password).toBe("This field is required");
-    //     expect(errors.confirm_password).toBe("This field is required");
-    // });
-
     it('checks that the user register form submits', ()=>{
         const userComponent = mount(<MemoryRouter><User store = {Weconnect}/></MemoryRouter>)
         let user_name = userComponent.find('input[name="userNameReg"]')

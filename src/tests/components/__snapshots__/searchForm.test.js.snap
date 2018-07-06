@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchForm component should match snapshot 1`] = `
+<form
+  className="form-inline"
+>
+  <Categories />
+  <Locations />
+  <input
+    className="form-control mb-2 mr-sm-2"
+    name="search_term"
+    placeholder="Enter search term"
+    type="text"
+  />
+  <button
+    className="btn btn-info mb-2"
+    type="submit"
+  >
+    Search
+  </button>
+    
+</form>
+`;

@@ -1,3 +1,4 @@
+//Mock sessionStorage for tests
 const mockStorage = {};
 
 const mockSessionStorage = {

@@ -9,9 +9,18 @@ import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { getBusinesses } from '../../actions/getAllBusinessesActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
-import Categories from './categories';
-import Locations from './locations';
+import SearchFilters from './searchForm';
 
+
+/**
+ * Businesses Component where a logged in user can view all businesses paginated.
+ * A user can also search for a business(es) and filter out businesses by category and
+ * /or location.
+ * 
+ * ```html
+ * <BusinessesList />
+ * ```
+ */
 class BusinessesList extends Component {
 
   componentDidMount=()=>{
@@ -39,6 +48,7 @@ class BusinessesList extends Component {
   clearFilters=()=>{
     window.location.reload();
   }
+
   //Function to toggle visibility of a div message depending on whether businesses are found or not
   businessesNotFound=()=>{
     if(this.props.getBusinessesMessage.message === "No businesses found"){
@@ -74,6 +84,23 @@ class BusinessesList extends Component {
     }
   }
 
+  //Function to toggle behaviour of the button showing total pages for paginantion
+  paginationPages=(prevPage, nextPage)=>{
+    if(nextPage === undefined && nextPage === undefined){
+      return "collapse"
+    }
+    else{
+      return "page-item disabled"
+    }
+  }
+
+  //loader image when state is empty
+  loader =(businesses)=>{
+    if(businesses.length<0){
+      return <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..."/>
+    }
+  }
+
   render() {
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
@@ -84,8 +111,8 @@ class BusinessesList extends Component {
     let paramsNext = ["", "", "", nextPage];
     let nextClass = this.paginationNext(nextPage)
     let prevClass = this.paginationPrev(prevPage)
+    let pagesClass = this.paginationPages(prevPage, nextPage)
     let businessNotFound = this.businessesNotFound()
-
 
     return (
       <div className="businessesList">
@@ -101,13 +128,8 @@ class BusinessesList extends Component {
                   <button type="button" className="btn btn-info btn-sm" style={{paddingBottom: '11px'}}>Register Business</button>
                 </a>
               </div>
-                <form className="form-inline" onSubmit={this.filterBusinesses}>
-                  <Categories/>
-                  <Locations/>
-                  <input type="text" className="form-control mb-2 mr-sm-2" name="search_term" placeholder="Enter search term"/>    
-                  <button type="submit" className="btn btn-info mb-2">Search</button> &nbsp;
-                </form>
-                <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear</button>
+              <SearchFilters onSubmit={this.filterBusinesses}/>
+              <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear</button>
               <div style = {{width:'100%'}}>
               <br/><br/>
                 <table className="table">
@@ -132,7 +154,7 @@ class BusinessesList extends Component {
                 <br/><br/>
                   <ul className="pagination justify-content-end" id="paginateSect">
                     <li className={prevClass} id="prev"><NavLink to={`/businesses?page=${prevPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsPrev)}>Previous</span></NavLink></li>
-                    <li className="page-item disabled"><a className="page-link">{currentPage} of {totalPages}</a></li>
+                    <li className={pagesClass}><a className="page-link">{currentPage} of {totalPages}</a></li>
                     <li className={nextClass} id="next"><NavLink to={`/businesses?page=${nextPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsNext)}>Next</span></NavLink></li>
                   </ul>
                 <br/>

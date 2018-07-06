@@ -15,6 +15,14 @@ import {receivedDataStringify} from '../helper/utilities';
 import Categories from './categories';
 import Locations from './locations';
 
+
+/**
+ * BusinessRegister Component where a logged in user can register a business details.
+ * 
+ * ```html
+ * <BusinessRegister />
+ * ```
+ */
 class BusinessRegister extends Component {
 
   componentDidMount=()=>{
@@ -31,6 +39,7 @@ class BusinessRegister extends Component {
   }
   
   componentWillReceiveProps(receivedProp){
+    //Appropriate notifications depending on the state
     if(receivedProp.registerBizMessage.message){
       if(receivedProp.registerBizMessage.message === "Business registered!"){
         NotificationManager.success("Business registered!","", 5000);

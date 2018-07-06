@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+/**
+ * Categories Component. These are used when registering a business
+ * 
+ * ```html
+ * <Categories />
+ * ```
+ */
 class Categories extends Component {
 
   render() {

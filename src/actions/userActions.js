@@ -1,7 +1,6 @@
 import { SIGN_USER, LOGIN_USER, LOGOUT_USER, RESET_PASSWORD } from './types';
 
 export const signUp=(signUPData)=>dispatch => {
-    console.log('Signing Up...');
     if (signUPData){
 
         const options = {
@@ -44,7 +43,6 @@ export const logIn=(loginData)=>dispatch => {
 }
 
 export const logOut=()=>dispatch => {
-        console.log('logging Out...');
         const options = {
             method:'POST', 
             headers:{

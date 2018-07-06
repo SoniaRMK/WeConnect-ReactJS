@@ -13,7 +13,6 @@ export default (state = initialState, action)=>{
             return {...state, 
             signUpMessage: action.payload}
         case LOGIN_USER:
-            console.log('reducer...')
             return {...state,
             loggedInToken: action.token}
         case LOGOUT_USER:

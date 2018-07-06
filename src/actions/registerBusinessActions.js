@@ -1,7 +1,6 @@
 import { REGISTER_BUSINESS} from './types';
 
 export const registerBusiness=(registerBusinessData)=>dispatch => {
-    console.log('Registering Business...');
     if (registerBusinessData){
 
         const options = {

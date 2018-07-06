@@ -11,6 +11,14 @@ import AuthNavigationBar from '../navBar/authNavigationBar';
 import {receivedDataStringify} from '../helper/utilities';
 import {resetPassword} from '../../actions/userActions';
 
+
+/**
+ * User reset password Component.
+ * 
+ * ```html
+ * <ResetPassword />
+ * ```
+ */
 class ResetPassword extends Component {
 
   componentDidMount=()=>{
@@ -27,6 +35,7 @@ class ResetPassword extends Component {
   }
 
   componentWillReceiveProps(receivedProp){
+    //Appropriate notifications depending on the state
     if(receivedProp.resetPasswordMessage.message){
       if(receivedProp.resetPasswordMessage.message === "Password Reset"){
         NotificationManager.success(receivedProp.resetPasswordMessage.message,"", 5000);

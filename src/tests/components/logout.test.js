@@ -25,8 +25,8 @@ describe('user reset password component',() => {
     })
 
     it("should render the logout component", () => {
-        const userComponent = mount(<MemoryRouter><LogoutUser store = {Weconnect}/></MemoryRouter>)
-        expect(userComponent.length).toBe(1);
+        const userLogoutComponent = mount(<MemoryRouter><LogoutUser store = {Weconnect}/></MemoryRouter>)
+        expect(userLogoutComponent.length).toBe(1);
         
     });
 })

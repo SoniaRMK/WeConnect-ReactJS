@@ -15,6 +15,14 @@ import { editBusiness } from '../../actions/getOneBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
 import {receivedDataStringify} from '../helper/utilities';
 
+
+/**
+ * EditBusiness Component where a logged in user can edit their business details.
+ * 
+ * ```html
+ * <EditBusiness />
+ * ```
+ */
 class EditBusiness extends Component {
 
   componentDidMount=()=>{
@@ -28,20 +36,21 @@ class EditBusiness extends Component {
   }
 
   componentWillReceiveProps(receivedProp){
+    //Appropriate notifications depending on the state
     if(receivedProp.editBusinessMessage.message){
       if(receivedProp.editBusinessMessage.message === "Business successfully Updated!"){
         NotificationManager.success("Business successfully Updated!","", 5000);
         document.location.replace("/businesses")
       }else{
         NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
-        console.log(receivedProp.editBusinessMessage.message)
       }
     }
     
   }
 
   //Function to edit a business
-  editOneBusiness=(event)=>{
+  editOneBusiness=(event, bizId)=>{
+    bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id;
     event.preventDefault();
     let businessData={
       business_name:event.target.elements.businessName.value,
@@ -49,7 +58,6 @@ class EditBusiness extends Component {
       location:event.target.elements.location.value,
       category:event.target.elements.category.value
     };
-    const bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id
     this.props.editBusiness(bizId, receivedDataStringify(businessData))
   }
 

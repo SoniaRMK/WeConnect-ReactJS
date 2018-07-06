@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+/**
+ * Navigation Bar Component when user is not logged in.
+ * 
+ * ```html
+ * <NavigationBar />
+ * ```
+ */
 class NavigationBar extends Component {
 
   render() {

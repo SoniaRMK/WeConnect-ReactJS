@@ -25,8 +25,19 @@ describe('BusinessesList component',() => {
     })
 
     it("should render the BusinessOne component", () => {
-        const userComponent = mount(<MemoryRouter><BusinessesList store = {Weconnect}/></MemoryRouter>)
-        expect(userComponent.length).toBe(1);
+        const businessesComponent = mount(<MemoryRouter><BusinessesList store = {Weconnect}/></MemoryRouter>)
+        expect(businessesComponent.length).toBe(1);
         
+    });
+
+    it('checks that the search form submits', ()=>{
+        const businessesComponent = mount(<MemoryRouter><BusinessesList store = {Weconnect}/></MemoryRouter>)
+        let q = businessesComponent.find('input[name="search_term"]')
+        q.simulate('change', {target:{value: 'rrr'}});
+        let category = businessesComponent.find('select[name="category"]')
+        category.simulate('change', {target:{value: 'Telecommunications'}});
+        let location = businessesComponent.find('select[name="location"]')
+        location.simulate('change', {target:{value: "Kampala"}});
+        businessesComponent.find('form.form-inline').simulate('submit');
     });
 })

@@ -12,6 +12,15 @@ import { getBusiness, deleteBusiness, addReview, getReviews } from '../../action
 import AuthNavigationBar from '../navBar/authNavigationBar';
 import {receivedDataStringify} from '../helper/utilities';
 
+
+/**
+ * Business Component where a logged in user can view a business, add a review and view all the reviews.
+ * Also, a user is able to delete or edit a business they created via this component
+ * 
+ * ```html
+ * <BusinessOne />
+ * ```
+ */
 class BusinessOne extends Component {
 
   componentDidMount=()=>{
@@ -59,6 +68,7 @@ class BusinessOne extends Component {
     }
   }
 
+  //hide edit and delete buttons on the business page when a logged in user did not create the business
   hideEditButtons=(userDecoded, businessCreatedBy)=>{
     if (userDecoded.username === businessCreatedBy){
       return "row show"
@@ -67,6 +77,7 @@ class BusinessOne extends Component {
     }
   }
 
+  //hide the add review form if the user who created the business is viewing the business
   hideAddReviewForm=(userDecoded, businessCreatedBy)=>{
     if (userDecoded.username === businessCreatedBy){
       return "collapse"
@@ -75,6 +86,7 @@ class BusinessOne extends Component {
     }
   }
 
+  //hide the line for a better view when the edit and delete buttons are hidden
   hideLine=(userDecoded, businessCreatedBy)=>{
     if (userDecoded.username === businessCreatedBy){
       return "show"

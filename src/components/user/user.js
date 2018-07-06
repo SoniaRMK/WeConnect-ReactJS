@@ -12,11 +12,19 @@ import {receivedDataStringify} from '../helper/utilities';
 import {signUp, logIn} from '../../actions/userActions';
 import SubmitButton from '../helper/submitButton';
 
+
+/**
+ * User register and login Component.
+ * 
+ * ```html
+ * <User />
+ * ```
+ */
 class User extends Component {
 
   componentWillReceiveProps(receivedProp){
+    //Appropriate notifications depending on the state
     if(receivedProp.userSignMessage.Message){
-      console.log(receivedProp.userSignMessage)
       if(receivedProp.userSignMessage.Message !== "User registered!"){
         NotificationManager.error(receivedProp.userSignMessage.Message,"", 5000);
       }
@@ -65,7 +73,7 @@ class User extends Component {
   render() {
     //Used to display tooltips in the input fields
     $(document).ready(function(){
-        $('[data-toggle="popover"]').popover();   
+      $('[data-toggle="tooltip"]').tooltip();   
     });
     
     return (
@@ -107,10 +115,10 @@ class User extends Component {
                   <input type="text" className="form-control" id="userName" placeholder="Enter a Username" name="userNameReg" required="required" />
                 </div>
                 <div className="form-group">
-                  <input data-toggle="popover" title="Email Guideline" data-content="Email example: weconnect@gmail.com" type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="emailReg" required="required" />
+                  <input data-toggle="tooltip" title="Email example: jondoe@gmail.com" data-placement="right" type="email" className="form-control" id="emailReg" placeholder="name@example.com" name="emailReg" required="required" />
                 </div>
                 <div className="form-group">
-                  <input data-toggle="popover" title="Password Guideline" data-content="Password should be atleast 8 characters long" type="password" className="form-control" id="psswdReg" placeholder="Enter password" name="psswdReg" required="required"/>
+                  <input data-toggle="tooltip" title="Password should be atleast 8 characters long" data-placement="right" type="password" className="form-control" id="psswdReg" placeholder="Enter password" name="psswdReg" required="required"/>
                 </div>
                 <div className="form-group">
                   <input type="password" className="form-control" id="psswd1" placeholder="Confirm password" name="psswd1Reg" required="required" />

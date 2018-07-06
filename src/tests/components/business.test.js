@@ -25,22 +25,22 @@ describe('BusinessOne component',() => {
     })
 
     it("should render the BusinessOne component", () => {
-        const userComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
-        expect(userComponent.length).toBe(1);
+        const businessComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
+        expect(businessComponent.length).toBe(1);
         
     });
 
     it('checks that the add review form submits', ()=>{
-        const userComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
-        let review_title = userComponent.find('input[name="reviewTitle"]')
+        const businessComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
+        let review_title = businessComponent.find('input[name="reviewTitle"]')
         review_title.simulate('change', {target:{value: 'Lovely Staff'}});
-        let review_msg = userComponent.find('textarea[name="reviweMsg"]')
+        let review_msg = businessComponent.find('textarea[name="reviweMsg"]')
         review_msg.simulate('change', {target:{value: 'Very helpful staff'}});
-        userComponent.find('form.addReviewForm').simulate('submit');
+        businessComponent.find('form.addReviewForm').simulate('submit');
     });
 
     it('checks that the delete form submits', ()=>{
-        const userComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
-        userComponent.find('form.deleteBusiness').simulate('submit');
+        const businessComponent = mount(<MemoryRouter><BusinessOne store = {Weconnect}/></MemoryRouter>)
+        businessComponent.find('form.deleteBusiness').simulate('submit');
     });
 })

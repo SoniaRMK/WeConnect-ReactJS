@@ -24,21 +24,21 @@ describe('BusinessRegister component',() => {
     })
 
     it("should render the BusinessOne component", () => {
-        const userComponent = mount(<MemoryRouter><BusinessRegister store = {Weconnect}/></MemoryRouter>)
-        expect(userComponent.length).toBe(1);
+        const businessRegisterComponent = mount(<MemoryRouter><BusinessRegister store = {Weconnect}/></MemoryRouter>)
+        expect(businessRegisterComponent.length).toBe(1);
         
     });
 
     it('checks that the create business form submits', ()=>{
-        const userComponent = mount(<MemoryRouter><BusinessRegister store = {Weconnect}/></MemoryRouter>)
-        let business_name = userComponent.find('input[name="businessName"]')
+        const businessRegisterComponent = mount(<MemoryRouter><BusinessRegister store = {Weconnect}/></MemoryRouter>)
+        let business_name = businessRegisterComponent.find('input[name="businessName"]')
         business_name.simulate('change', {target:{value: 'URA'}});
-        let business_profile = userComponent.find('textarea[name="descr"]')
+        let business_profile = businessRegisterComponent.find('textarea[name="descr"]')
         business_profile.simulate('change', {target:{value: 'For tax collection and returns'}});
-        let location = userComponent.find('select[name="location"]')
+        let location = businessRegisterComponent.find('select[name="location"]')
         location.simulate('change', {target:{value: 'Kampala'}});
-        let category = userComponent.find('select[name="category"]')
+        let category = businessRegisterComponent.find('select[name="category"]')
         category.simulate('change', {target:{value: 'Consulting'}});
-        userComponent.find('form.registerBusinessForm').simulate('submit');
+        businessRegisterComponent.find('form.registerBusinessForm').simulate('submit');
     });
 })

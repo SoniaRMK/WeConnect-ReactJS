@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+/**
+ * Locations Component. These are used when registering a business
+ * 
+ * ```html
+ * <Locations />
+ * ```
+ */
 class Locations extends Component {
 
   render() {
