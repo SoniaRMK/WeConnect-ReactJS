@@ -3,19 +3,29 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, NavLink } from 'react-router-dom';
 import decode from 'jwt-decode';
-import {NotificationManager} from 'react-notifications';
 
-import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { getBusinesses } from '../../actions/getAllBusinessesActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import SearchFilters from './searchForm';
 
+
+/**
+ * Businesses Component where a logged in user can view all businesses paginated.
+ * A user can also search for a business(es) and filter out businesses by category and
+ * /or location.
+ * 
+ * ```html
+ * <BusinessesList />
+ * ```
+ */
 class BusinessesList extends Component {
 
   componentDidMount=()=>{
 
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
@@ -26,6 +36,7 @@ class BusinessesList extends Component {
     }
   }
 
+  //Function to receive the search and filter values from the user
   filterBusinesses=(event)=>{
     event.preventDefault();
     let location = event.target.elements.location.value
@@ -38,6 +49,7 @@ class BusinessesList extends Component {
     window.location.reload();
   }
 
+  //Function to toggle visibility of a div message depending on whether businesses are found or not
   businessesNotFound=()=>{
     if(this.props.getBusinessesMessage.message === "No businesses found"){
       return "show"
@@ -47,6 +59,7 @@ class BusinessesList extends Component {
     }
   }
 
+  //Function to toggle behaviour of the previous button for paginantion
   paginationPrev=(prevPage)=>{
     if(prevPage === undefined){
       return "collapse"
@@ -58,7 +71,7 @@ class BusinessesList extends Component {
       return "page-item"
     }
   }
-
+  //Function to toggle behaviour of the next button for paginantion
   paginationNext=(nextPage)=>{
     if(nextPage === undefined){
       return "collapse"
@@ -71,27 +84,36 @@ class BusinessesList extends Component {
     }
   }
 
+  //Function to toggle behaviour of the button showing total pages for paginantion
+  paginationPages=(prevPage, nextPage)=>{
+    if(nextPage === undefined && nextPage === undefined){
+      return "collapse"
+    }
+    else{
+      return "page-item disabled"
+    }
+  }
+
+  //loader image when state is empty
+  loader =(businesses)=>{
+    if(businesses.length<0){
+      return <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..."/>
+    }
+  }
+
   render() {
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
+    const totalPages = this.props.getBusinessesMessage.totalPages;
+    const currentPage = this.props.getBusinessesMessage.currentPage;
     const nextPage = this.props.getBusinessesMessage.nextPage;
     let paramsPrev = ["","", "", prevPage];
     let paramsNext = ["", "", "", nextPage];
     let nextClass = this.paginationNext(nextPage)
     let prevClass = this.paginationPrev(prevPage)
+    let pagesClass = this.paginationPages(prevPage, nextPage)
     let businessNotFound = this.businessesNotFound()
 
-
-    if (businesses){
-      Array.prototype.reverse.call(businesses)
-    }else{
-      NotificationManager.error("No businesses found","", 5000);
-    }
-
-    if(this.props.getBusinessesMessage.message === "No businesses found"){
-      document.getElementById("noBusinesses").className = "show";
-    }
-    
     return (
       <div className="businessesList">
         <AuthNavigationBar/>
@@ -106,30 +128,8 @@ class BusinessesList extends Component {
                   <button type="button" className="btn btn-info btn-sm" style={{paddingBottom: '11px'}}>Register Business</button>
                 </a>
               </div>
-                <form className="form-inline" onSubmit={this.filterBusinesses}>
-                  <select className="form-control mb-2 mr-sm-2" name="category" style={{width: '240px'}} >
-                    <option value="">Business Category</option>  
-                    <option value="Consulting">Consulting</option>
-                    <option value="Telecommunications">Telecommunications</option>
-                    <option value="Food and Beverages">Food and Beverages</option>
-                    <option value="Computing and Technology">Computing and Technology</option>
-                    <option value="Hotels and Accommodation">Hotels and Accommodation</option>
-                    <option value="Arts and Crafts">Arts and Crafts</option>
-                  </select>
-                  <select className="form-control mb-2 mr-sm-2" name="location">
-                    <option value="">Business Location</option> 
-                    <option value="Mbarara">Mbarara</option>
-                    <option value="Kampala">Kampala</option>
-                    <option value="Gulu">Gulu</option>
-                    <option value="Soroti">Soroti</option>
-                    <option value="Hoima">Hoima</option>
-                    <option value="Kabarole">Kabarole</option>
-                  </select>
-                  
-                  <input type="text" className="form-control mb-2 mr-sm-2" name="search_term" placeholder="Enter search term"/>    
-                  <button type="submit" className="btn btn-info mb-2">Search</button> &nbsp;
-                </form>
-                <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear filters</button>
+              <SearchFilters onSubmit={this.filterBusinesses}/>
+              <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear</button>
               <div style = {{width:'100%'}}>
               <br/><br/>
                 <table className="table">
@@ -154,6 +154,7 @@ class BusinessesList extends Component {
                 <br/><br/>
                   <ul className="pagination justify-content-end" id="paginateSect">
                     <li className={prevClass} id="prev"><NavLink to={`/businesses?page=${prevPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsPrev)}>Previous</span></NavLink></li>
+                    <li className={pagesClass}><a className="page-link">{currentPage} of {totalPages}</a></li>
                     <li className={nextClass} id="next"><NavLink to={`/businesses?page=${nextPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsNext)}>Next</span></NavLink></li>
                   </ul>
                 <br/>

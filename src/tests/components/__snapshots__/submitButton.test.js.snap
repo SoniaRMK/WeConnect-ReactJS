@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubmitButton component should match snapshot 1`] = `
+<div
+  className="submitButton"
+>
+  <button
+    className="btn btn-info"
+    style={
+      Object {
+        "float": "left",
+      }
+    }
+    type="submit"
+  >
+    Submit
+  </button>
+</div>
+`;

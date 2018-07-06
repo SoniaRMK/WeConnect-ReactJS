@@ -6,13 +6,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
+
+/**
+ * Navigation Bar Component when user is logged in.
+ * 
+ * ```html
+ * <AuthNavigationBar />
+ * ```
+ */
 class AuthNavigationBar extends Component {
 
-  render() {
+  //function to display the user name of the user logged in
+  userNameCase=()=>{
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
     var userName = changeCase.titleCase(userDecoded.username);
-
+    return userName
+  }; 
+  
+  render() {
+    
     return (
       <div className="navigationBar">
          <nav className="navbar navbar-expand-md bg-info navbar-dark" style={{cursor: 'pointer'}}>
@@ -27,7 +40,7 @@ class AuthNavigationBar extends Component {
                       <li className="nav-item"><a style={{color: '#fff'}} className="nav-link">Contact</a></li>
                       <li className="nav-item">
                         <div className="dropdown">
-                          <a style={{color: '#fff'}} className="nav-link dropdown-toggle" data-toggle="dropdown">Hello {userName}</a>
+                          <a style={{color: '#fff'}} className="nav-link dropdown-toggle" data-toggle="dropdown">Hello {this.userNameCase()}</a>
                           <div className="dropdown-menu">
                             <a className="dropdown-item" href="/reset-password">Reset Password</a>
                             <a className="dropdown-item" href="/logout">Logout</a>

@@ -10,11 +10,22 @@ import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getBusiness, deleteBusiness, addReview, getReviews } from '../../actions/getOneBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 
+
+/**
+ * Business Component where a logged in user can view a business, add a review and view all the reviews.
+ * Also, a user is able to delete or edit a business they created via this component
+ * 
+ * ```html
+ * <BusinessOne />
+ * ```
+ */
 class BusinessOne extends Component {
 
   componentDidMount=()=>{
 
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
@@ -27,6 +38,7 @@ class BusinessOne extends Component {
     }
   }
 
+  //Function to delete a business
   deleteOneBusiness=()=>{
     const popup = window.confirm('Are you sure you want to delete this business?'); 
     if (popup === true) {
@@ -37,20 +49,7 @@ class BusinessOne extends Component {
     
   }
 
-  reviewBusinessDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-      }
-
+  //Function to a add to review to a business
   addOneReview=(event)=>{
     event.preventDefault();
     let reviewBusinessData={
@@ -58,13 +57,41 @@ class BusinessOne extends Component {
       review_msg:event.target.elements.reviweMsg.value
     };
     const bizId = this.props.match.params.bizid
-    this.props.addReview(bizId, this.reviewBusinessDataStringify(reviewBusinessData))
+    this.props.addReview(bizId, receivedDataStringify(reviewBusinessData))
     window.location.reload();
   }
 
+  //Notification for when a business has no reviews
   notificationMessage=()=>{
       if(this.props.getReviewsMessage.message === "Business doesn't have reviews yet!!"){
         document.getElementById("noReviews").className = "show";
+    }
+  }
+
+  //hide edit and delete buttons on the business page when a logged in user did not create the business
+  hideEditButtons=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "row show"
+    }else{
+      return "row collapse"
+    }
+  }
+
+  //hide the add review form if the user who created the business is viewing the business
+  hideAddReviewForm=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "collapse"
+    }else{
+      return "col bg-light show"
+    }
+  }
+
+  //hide the line for a better view when the edit and delete buttons are hidden
+  hideLine=(userDecoded, businessCreatedBy)=>{
+    if (userDecoded.username === businessCreatedBy){
+      return "show"
+    }else{
+      return "collapse"
     }
   }
 
@@ -74,7 +101,6 @@ class BusinessOne extends Component {
     const reviews=Object.values({...this.props.getReviewsMessage.Reviews});
     
     if(oneBusiness){
-      console.log(oneBusiness)
       var businessID = oneBusiness.id
       var businessCreatedBy = oneBusiness.CreatedBy
       var businessName = oneBusiness.BusinessName
@@ -82,13 +108,14 @@ class BusinessOne extends Component {
       var businessCategory = oneBusiness.Category
       var businessLocation = oneBusiness.Location
     }
+
+    //condition to either show or hide the Delete and Update buttons depending on the logged in user
     var userToken = sessionStorage.getItem("access_token");
     var userDecoded = decode(userToken);
-    if (userDecoded.username === businessCreatedBy){
-      document.getElementById("deleteEdit").className = "row show";
-      document.getElementById("line").className = "show";
-      document.getElementById("addReviewDiv").className = "collapse";
-    }
+    let EditDeleteButtonClass = this.hideEditButtons(userDecoded, businessCreatedBy)
+    let LineClass = this.hideLine(userDecoded, businessCreatedBy)
+    let addReviewClass = this.hideAddReviewForm(userDecoded, businessCreatedBy)
+
     if (reviews){
       Array.prototype.reverse.call(reviews)
     }       
@@ -98,11 +125,11 @@ class BusinessOne extends Component {
         <AuthNavigationBar/>
          <div className="container">
           <br /><br /><h1>{businessName}</h1> <hr /> 
-          <div className="row collapse" id="deleteEdit">   
+          <div className={EditDeleteButtonClass} id="deleteEdit">   
             <button type="submit" className="btn btn-info" style={{marginLeft: '20px'}}><NavLink to={`/edit-business/${businessID}`} style={{textDecoration: 'None', color: 'white'}}>Update</NavLink></button>&nbsp;
-            <form onSubmit={this.deleteOneBusiness}><button type="submit" className="btn btn-danger">Delete</button></form>
+            <form onSubmit={this.deleteOneBusiness} className="deleteBusiness"><button type="submit" className="btn btn-danger">Delete</button></form>
           </div>
-          <hr className="collapse" id="line"/>
+          <hr className={LineClass} id="line"/>
           <div className="row"><br />
             <div className="col bg-info">
               <h3 style={{textAlign:'center', color: '#000'}}><br />About {businessName}</h3>
@@ -112,9 +139,9 @@ class BusinessOne extends Component {
                 {businessProfile}
               </p>
             </div>
-            <div className="col bg-light show" id="addReviewDiv" style={{border: '2px solid #14a2b8'}}>
+            <div className={addReviewClass} id="addReviewDiv" style={{border: '2px solid #14a2b8'}}>
               <h3 style={{textAlign: 'center', color:'#17a2b8'}}><br />Add a Review</h3><br/>
-              <form onSubmit={this.addOneReview}>
+              <form onSubmit={this.addOneReview} className="addReviewForm">
                 <div className="form-group" style={{border: '2px solid #14a2b8', borderRadius: '7px'}}>
                   <input type="text" className="form-control" name="reviewTitle" placeholder="Enter the review title" required="required"/>
                 </div>

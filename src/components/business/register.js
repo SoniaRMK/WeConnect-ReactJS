@@ -11,11 +11,23 @@ import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import {registerBusiness} from '../../actions/registerBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
+import Categories from './categories';
+import Locations from './locations';
 
+
+/**
+ * BusinessRegister Component where a logged in user can register a business details.
+ * 
+ * ```html
+ * <BusinessRegister />
+ * ```
+ */
 class BusinessRegister extends Component {
 
   componentDidMount=()=>{
 
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
@@ -27,34 +39,19 @@ class BusinessRegister extends Component {
   }
   
   componentWillReceiveProps(receivedProp){
-    console.log(receivedProp)
+    //Appropriate notifications depending on the state
     if(receivedProp.registerBizMessage.message){
       if(receivedProp.registerBizMessage.message === "Business registered!"){
         NotificationManager.success("Business registered!","", 5000);
         this.props.history.push("/businesses")
       }else{
         NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
-        console.log(receivedProp.registerBizMessage.message)
       }
     }
     
   }
 
-  registerBizDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-
-  }
-
+  //Function to get values from the register form in order to add the business to the DB
   registerBiz=(event)=>{
     event.preventDefault();
     let businessData={
@@ -63,7 +60,7 @@ class BusinessRegister extends Component {
       location:event.target.elements.location.value,
       category:event.target.elements.category.value
     };
-    this.props.registerBusiness(this.registerBizDataStringify(businessData))
+    this.props.registerBusiness(receivedDataStringify(businessData))
   }
 
   render() {
@@ -75,30 +72,14 @@ class BusinessRegister extends Component {
         <div className="row">
             <div className="col bg-info">
               <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Register a business</h4><br/>
-              <form onSubmit={this.registerBiz}>
+              <form onSubmit={this.registerBiz} className="registerBusinessForm">
                 <div className="form-group">
                   <input type="text" className="form-control" id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
                 </div>
                 <div className="form-group">
-                  <select className="form-control" id="location" name="location" required="required">
-                    <option value="">Business Location</option> 
-                    <option value="Mbarara">Mbarara</option>
-                    <option value="Kampala">Kampala</option>
-                    <option value="Gulu">Gulu</option>
-                    <option value="Soroti">Soroti</option>
-                    <option value="Hoima">Hoima</option>
-                    <option value="Kabarole">Kabarole</option>
-                  </select>
+                  <Locations/>
                   <br />
-                  <select className="form-control" id="category" name="category" required="required">
-                    <option value="">Business Category</option>  
-                    <option value="Consulting">Consulting</option>
-                    <option value="Telecommunications">Telecommunications</option>
-                    <option value="Food and Beverages">Food and Beverages</option>
-                    <option value="Computing and Technology">Computing and Technology</option>
-                    <option value="Hotels and Accommodation">Hotels and Accommodation</option>
-                    <option value="Arts and Crafts">Arts and Crafts</option>
-                  </select>
+                  <Categories/>
                 </div>
                 <div className="form-group">
                   <textarea className="form-control" placeholder="Enter Description of the business" id="descr" name="descr" required="required" />

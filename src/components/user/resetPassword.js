@@ -8,12 +8,22 @@ import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 import {resetPassword} from '../../actions/userActions';
 
+
+/**
+ * User reset password Component.
+ * 
+ * ```html
+ * <ResetPassword />
+ * ```
+ */
 class ResetPassword extends Component {
 
   componentDidMount=()=>{
 
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken !== null) && (userDecoded.exp > Date.now() / 1000)) {
@@ -25,9 +35,9 @@ class ResetPassword extends Component {
   }
 
   componentWillReceiveProps(receivedProp){
+    //Appropriate notifications depending on the state
     if(receivedProp.resetPasswordMessage.message){
       if(receivedProp.resetPasswordMessage.message === "Password Reset"){
-        console.log(receivedProp.resetPasswordMessage.message)
         NotificationManager.success(receivedProp.resetPasswordMessage.message,"", 5000);
         sessionStorage.removeItem("access_token")
         this.props.history.push("/")
@@ -38,21 +48,7 @@ class ResetPassword extends Component {
     }
   }
   
-  userDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-
-  }
-
+  //Function to reset user password
   resetUserPassword=(event)=>{
     event.preventDefault();
     let userData={
@@ -62,7 +58,7 @@ class ResetPassword extends Component {
     if (event.target.elements.psswd.value !== event.target.elements.psswd1.value){
       NotificationManager.error("Passwords donot match!", "", 5000);
     }else{
-      this.props.resetPassword(this.userDataStringify(userData))
+      this.props.resetPassword(receivedDataStringify(userData))
     }
   }
 
@@ -75,7 +71,7 @@ class ResetPassword extends Component {
           <div className="row" style={{border:'5px solid #17a2b8'}}>
             <div className="col-12 bg-info" id="resetpassword">
               <br/><h2 style={{color:'#fff', textAlign: 'center'}}>Reset Password</h2><br/><br/>
-              <form onSubmit={this.resetUserPassword}>
+              <form onSubmit={this.resetUserPassword} className="resetPassword">
                 <div className="form-group">
                   <input type="email" className="form-control" id="emailReg" placeholder="Enter email" name="email" required="required" />
                 </div>

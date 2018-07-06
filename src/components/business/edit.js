@@ -13,48 +13,44 @@ import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import { editBusiness } from '../../actions/getOneBusinessActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
+import {receivedDataStringify} from '../helper/utilities';
 
+
+/**
+ * EditBusiness Component where a logged in user can edit their business details.
+ * 
+ * ```html
+ * <EditBusiness />
+ * ```
+ */
 class EditBusiness extends Component {
 
   componentDidMount=()=>{
+
+    //check validity of token before mounting the component
     var userToken = sessionStorage.getItem("access_token");
     const userDecoded = decode(userToken);
     if ((userToken === null) || (userDecoded.exp < Date.now() / 1000)) {
-      console.log(this.props)
       this.props.history.push("/")
     }
   }
 
   componentWillReceiveProps(receivedProp){
-    console.log(receivedProp)
+    //Appropriate notifications depending on the state
     if(receivedProp.editBusinessMessage.message){
       if(receivedProp.editBusinessMessage.message === "Business successfully Updated!"){
         NotificationManager.success("Business successfully Updated!","", 5000);
-        this.props.history.push("/businesses")
+        document.location.replace("/businesses")
       }else{
         NotificationManager.error(receivedProp.registerBizMessage.message,"", 5000);
-        console.log(receivedProp.editBusinessMessage.message)
       }
     }
     
   }
 
-  updateBizDataStringify = (object) =>{
-    let simpleObj={};
-        for (let prop in object){
-            if (!object.hasOwnProperty(prop)){
-                continue;
-            }
-            if (typeof(object[prop]) === 'object'){
-                continue;
-            }
-            simpleObj[prop] = object[prop];
-        }
-        return JSON.stringify(simpleObj);
-
-  }
-
-  editOneBusiness=(event)=>{
+  //Function to edit a business
+  editOneBusiness=(event, bizId)=>{
+    bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id;
     event.preventDefault();
     let businessData={
       business_name:event.target.elements.businessName.value,
@@ -62,21 +58,20 @@ class EditBusiness extends Component {
       location:event.target.elements.location.value,
       category:event.target.elements.category.value
     };
-    const bizId = Weconnect.getState().getBusiness.getBusinessMessage.business.id
-    this.props.editBusiness(bizId, this.updateBizDataStringify(businessData))
+    this.props.editBusiness(bizId, receivedDataStringify(businessData))
   }
 
   render() {
-    console.log(Weconnect.getState().getBusiness.getBusinessMessage.business)
+
+    /* This makes sure that the edit business form is populated with the previous values 
+       before rendering it for easier editing */
     if(Weconnect.getState().getBusiness.getBusinessMessage.business){
       var businessName = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessName;
       var businessProfile = Weconnect.getState().getBusiness.getBusinessMessage.business.BusinessProfile;
       var businessLocation = Weconnect.getState().getBusiness.getBusinessMessage.business.Location;
       var businessCategory = Weconnect.getState().getBusiness.getBusinessMessage.business.Category;
       }
-    else{
-      this.props.history.push(`/businesses/${Weconnect.getState().getBusiness.getBusinessMessage.business.id}`)
-    }
+
     return (
       <div className="businessRegister">
         <AuthNavigationBar/>
@@ -85,7 +80,7 @@ class EditBusiness extends Component {
         <div className="row">
             <div className="col bg-info">
               <h4 style={{textAlign: 'center', color: '#fff', fontWeight: 'bolder'}}><br />Edit business</h4><br/>
-              <form onSubmit={this.editOneBusiness}>
+              <form onSubmit={this.editOneBusiness} className="editBusinessForm">
                 <div className="form-group">
                   <input type="text" className="form-control" defaultValue={businessName} id="businessName" placeholder="Enter Business Name" name="businessName" required="required" />
                 </div>

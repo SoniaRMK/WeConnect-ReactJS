@@ -1,7 +1,6 @@
 import {GET_ONE_BUSINESS, DELETE_BUSINESS, EDIT_BUSINESS, ADD_REVIEW, GET_REVIEWS} from './types';
 
 export const getBusiness=(bizId)=>dispatch => {
-    console.log('Getting one Business...');
 
     const options = {
         method:'GET',
@@ -21,7 +20,6 @@ export const getBusiness=(bizId)=>dispatch => {
 }
 
 export const deleteBusiness=(bizId)=>dispatch => {
-    console.log('deleting a Business...');
 
     const options = {
         method:'DELETE',
@@ -43,7 +41,6 @@ export const deleteBusiness=(bizId)=>dispatch => {
 }
 
 export const addReview=(bizId, reviewData)=>dispatch => {
-    console.log('adding a review to Business...');
 
     const options = {
         method:'POST',
@@ -65,7 +62,6 @@ export const addReview=(bizId, reviewData)=>dispatch => {
 }
 
 export const editBusiness=(bizId, businessData)=>dispatch => {
-    console.log('adding a review to Business...');
 
     const options = {
         method:'PUT',
@@ -87,7 +83,6 @@ export const editBusiness=(bizId, businessData)=>dispatch => {
 }
 
 export const getReviews=(bizId)=>dispatch => {
-    console.log('getting reviews...');
 
     const options = {
         method:'GET',
