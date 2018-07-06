@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,9 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
  * <Locations />
  * ```
  */
-class Locations extends Component {
-
-  render() {
+const Locations =()=> {
     return (
         <select className="form-control mb-2 mr-sm-2" name="location">
             <option value="">Business Location</option> 
@@ -25,6 +23,5 @@ class Locations extends Component {
         </select>
     );
   }
-}
 
 export default Locations;

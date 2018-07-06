@@ -10,6 +10,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import { getBusinesses } from '../../actions/getAllBusinessesActions';
 import AuthNavigationBar from '../navBar/authNavigationBar';
 import SearchFilters from './searchForm';
+import TableList from './tableList';
 
 
 /**
@@ -94,13 +95,6 @@ class BusinessesList extends Component {
     }
   }
 
-  //loader image when state is empty
-  loader =(businesses)=>{
-    if(businesses.length<0){
-      return <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..."/>
-    }
-  }
-
   render() {
     const businesses=Object.values({...this.props.getBusinessesMessage.Businesses});
     const prevPage = this.props.getBusinessesMessage.prevPage;
@@ -112,8 +106,8 @@ class BusinessesList extends Component {
     let nextClass = this.paginationNext(nextPage)
     let prevClass = this.paginationPrev(prevPage)
     let pagesClass = this.paginationPages(prevPage, nextPage)
-    let businessNotFound = this.businessesNotFound()
-
+    // let businessNotFound = this.businessesNotFound()
+    let myprops = {businessNotFound: this.businessesNotFound, businesses: businesses}
     return (
       <div className="businessesList">
         <AuthNavigationBar/>
@@ -132,25 +126,7 @@ class BusinessesList extends Component {
               <button onClick={this.clearFilters} type="submit" className="btn btn-danger mb-2" title='Clear filters'>Clear</button>
               <div style = {{width:'100%'}}>
               <br/><br/>
-                <table className="table">
-                  <thead className="thead-light">
-                    <tr>
-                      <th>Business Name</th>
-                      <th>Category</th>
-                      <th>Location</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <tr className={businessNotFound} id="noBusinesses"><th style = {{textAlign: 'center', fontWeight: 'bold', fontSize: '1.5em', color: 'red'}}>No Businesses found</th></tr>
-                   {businesses.map((business, index) =>(
-                      <tr key={business['id']}>
-                      <td><NavLink to={`/businesses/${business.id}`} style={{textDecoration: 'None'}}> {business['BusinessName']}</NavLink></td>
-                      <td> {business['Category']}</td>
-                      <td> {business['Location']}</td>
-                      </tr>)
-                    )}
-                  </tbody>
-                </table>
+                <TableList myprops={myprops}/>
                 <br/><br/>
                   <ul className="pagination justify-content-end" id="paginateSect">
                     <li className={prevClass} id="prev"><NavLink to={`/businesses?page=${prevPage}`} className="page-link"><span onClick={()=>this.props.getBusinesses(...paramsPrev)}>Previous</span></NavLink></li>

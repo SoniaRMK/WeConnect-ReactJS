@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -14,11 +14,10 @@ import Locations from './locations';
  * <SearchFilters />
  * ```
  */
-class SearchFilters extends Component {
+const SearchFilters =(props)=> {
 
-    render() {
         return (
-            <form className="form-inline" onSubmit={this.props.onSubmit}>
+            <form className="form-inline" onSubmit={props.onSubmit}>
                 <Categories/>
                 <Locations/>
                 <input type="text" className="form-control mb-2 mr-sm-2" name="search_term" placeholder="Enter search term"/>    
@@ -26,6 +25,6 @@ class SearchFilters extends Component {
             </form>
         );
     }
-}
+
 
 export default SearchFilters;
