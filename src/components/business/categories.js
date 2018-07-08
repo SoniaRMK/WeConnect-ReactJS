@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,9 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
  * <Categories />
  * ```
  */
-class Categories extends Component {
+const Categories =()=> {
 
-  render() {
     return (
       <select className="form-control mb-2 mr-sm-2" name="category" >
         <option value="">Business Category</option>  
@@ -25,6 +24,5 @@ class Categories extends Component {
     </select>
     );
   }
-}
 
 export default Categories;
