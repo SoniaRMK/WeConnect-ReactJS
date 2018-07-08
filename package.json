@@ -56,5 +56,5 @@
       "enzyme-to-json/serializer"
     ]
   },
-  "proxy": "https://weconnect-flask-api.herokuapp.com"
+  "proxy" : "http://localhost:5000"
 }
