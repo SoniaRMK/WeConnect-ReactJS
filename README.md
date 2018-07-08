@@ -21,6 +21,8 @@ To get the frontend running locally:
 
 For convenience, we have a live API server running on Heroku for the application to make requests against. You can view [the API spec here](https://github.com/SoniaRMK/WeConnect/tree/WeConnectAPI-DB) which contains all routes & responses for the server.
 
+To make requests to this API, go to `package.json` found in the root folder of the project and change `proxy` settings to `https://weconnect-flask-api.herokuapp.com`
+
  ## Functionality overview
 
  WeConnect provides a platform that brings businesses and individuals together.
