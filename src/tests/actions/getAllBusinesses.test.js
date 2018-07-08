@@ -7,6 +7,7 @@ import fetchMock from 'fetch-mock';
 import { GET_ALL_BUSINESSES } from '../../actions/types';
 import mockSessionStorage from '../sessionStorage';
 
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({ data: {} });
@@ -45,7 +46,7 @@ describe("get all businesses actions", () => {
         return store.dispatch(actions.getBusinesses(q, location, category, page));
         expect(calledActions).toEqual(expectedActions);
     })
-
+  
     it('creates GET_ALL_BUSINESSES action even without parameters provided', () => {
         let q = ""; let location = ""; let category = ""; let page = 1;
         sessionStorage.setItem("access_token", loginUserMock.token);
