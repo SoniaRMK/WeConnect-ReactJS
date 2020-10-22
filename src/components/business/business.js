@@ -44,8 +44,13 @@ class BusinessOne extends Component {
     if (popup === true) {
       this.props.deleteBusiness(this.props.match.params.bizid)
       this.props.history.push("/businesses")
-      NotificationManager.success("Business successfully deleted", "", 5000);
+      NotificationManager.success("Business object successfully deleted", "", 5000);
     }
+    
+  }
+
+  tryMe=()=>{
+    alert("Yay! You're a strong one");
     
   }
 
@@ -63,7 +68,7 @@ class BusinessOne extends Component {
 
   //Notification for when a business has no reviews
   notificationMessage=()=>{
-      if(this.props.getReviewsMessage.message === "Business doesn't have reviews yet!!"){
+      if(this.props.getReviewsMessage.message === "Business object doesn't have reviews yet!!"){
         document.getElementById("noReviews").className = "show";
     }
   }
