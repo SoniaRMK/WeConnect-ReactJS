@@ -42,9 +42,10 @@ class BusinessOne extends Component {
   deleteOneBusiness=()=>{
     const popup = window.confirm('Are you sure you want to delete this business?'); 
     if (popup === true) {
-      this.props.deleteBusiness(this.props.match.params.bizid)
-      this.props.history.push("/businesses")
-      NotificationManager.success("Business object successfully deleted", "", 5000);
+      // this.props.deleteBusiness(this.props.match.params.bizid)
+      // this.props.history.push("/businesses")
+      // NotificationManager.success("Business object successfully deleted", "", 5000);
+      console.log("lET's see what happens")
     }
     
   }
